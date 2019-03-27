@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IDDFS_Tests {
+public class IDDFS {
 
     @Test
     void testSimplePuzzle(){
@@ -31,6 +31,17 @@ public class IDDFS_Tests {
         assertEquals(0, b.iterativeDFS().size());
     }*/
 
+    @Test
+    void testLevel7(){
+
+        int[] robots = {100, 137};
+
+        int[] targets = {83, 196};
+
+        Board b = new Board(TestBoards.LEVEL_7_WALLS, targets, robots);
+
+        assertEquals(8, b.iterativeDFS().size());
+    }
 
     @Test
     void testLevel10(){
@@ -44,16 +55,15 @@ public class IDDFS_Tests {
         assertEquals(13, b.iterativeDFS().size());
     }
 
-    //@Test
-    void testLevel24(){
+    @Test
+    void testLevel18(){
 
-        int[] robots = {49, 60, 145, 253};
+        int[] robots = {150, 153, 93};
 
-        int[] targets = {30, -1, 172, 22};
+        int[] targets = {73, 85, -1};
 
-        Board b = new Board(TestBoards.LEVEL_24_WALLS, targets, robots);
+        Board b = new Board(TestBoards.LEVEL_18_WALLS, targets, robots);
 
-        assertEquals(22, b.iterativeDFS().size());
+        assertEquals(10, b.iterativeDFS().size());
     }
-
 }

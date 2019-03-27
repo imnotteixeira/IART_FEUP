@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MinimumMoves_Tests {
+public class MinimumMoves {
 
     @Test
     void testMinimumMovesPerCellPerTarget(){
@@ -30,7 +30,7 @@ public class MinimumMoves_Tests {
 
         int[] robots = {};
 
-        int[] targets = {};
+        int[] targets = {0};
 
         Board b = new Board(TestBoards.NO_WALLS, targets, robots);
 

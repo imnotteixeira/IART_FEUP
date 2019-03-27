@@ -2,53 +2,15 @@ package com.angelo;
 
 import java.util.*;
 
-class State {
-
-    public int[] robots;
-
-    public int currentMoveCount;
-    public State parentState = null;
-
-    public State(int[] robots, int currentMoveCount) {
-
-        this.robots = robots;
-        this.currentMoveCount = currentMoveCount;
-
-    }
-
-    public State(State parent, int[] robots, int currentMoveCount) {
-        this(robots, currentMoveCount);
-        this.parentState = parent;
-    }
-
-    public static State fromRobotMove(State old, int idx, int pos) {
-        int[] newRobots = old.robots.clone();
-        newRobots[idx] = pos;
-
-        return new State(old, newRobots, old.currentMoveCount+1);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        return Arrays.equals(robots, state.robots);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(robots);
-    }
-}
-
 public class Board {
 
-    static final int MAX_DEPTH = 32;
+    static final int INITIAL_IDDFS_MAX_DEPTH = 2;
+    static final int IDDFS_MAX_DEPTH = 32;
     static final int BOARD_SIZE = 16;
     static final int MAX_POS = BOARD_SIZE*BOARD_SIZE - 1;
 
     static final int[] directions = {-16, 1, 16, -1};
+    static int[][] minMovesPerTarget;
 
     public byte[] walls;
     public int[] targets;
@@ -59,11 +21,25 @@ public class Board {
         this.walls = walls;
         this.targets = targets;
         this.initialState = new State(robots, 0);
+        Board.minMovesPerTarget = getMinMovesPerTarget();
     }
 
-    //TODO [DISCUSS] should elapsed time be calculated inside solve for each method?
     public void solve() {
         iterativeDFS();
+    }
+
+    private int[][] getMinMovesPerTarget(){
+
+        int[][] result = new int[this.targets.length][BOARD_SIZE*BOARD_SIZE];
+
+        for(int i = 0; i < this.targets.length; i++){
+            if(this.targets[i] == -1){
+                continue;
+            }
+            result[i] = generateMinimumMovesPerCellPerTarget(i);
+        }
+
+        return result;
     }
 
     private void printSolution(ArrayList<State> states) {
@@ -77,27 +53,6 @@ public class Board {
         System.out.println("Found solution with " + (states.size() - 1) + " moves");
     }
 
-    public ArrayList<State> iterativeDFS() {
-
-        int initialDepth = 2; // TODO make this a static class attribute?
-        long start = System.nanoTime();
-        for (int i = initialDepth; i <= MAX_DEPTH; i++) {
-            try {
-                ArrayList<State> iddfsSolution = iddfs(i);
-                long elapsed = (System.nanoTime() - start) / 1000000;
-
-                printSolution(iddfsSolution);
-                System.out.println("Elapsed Time: " + elapsed + " ms");
-                return iddfsSolution;
-            } catch(Exception e) {
-                continue;
-            }
-        }
-
-        return new ArrayList<>();
-
-    }
-
     private boolean isSolution(State state) {
 
         for (int i = 0; i < this.targets.length; i++) {
@@ -108,34 +63,6 @@ public class Board {
         }
 
         return true;
-    }
-
-    private ArrayList<State> iddfs(int maxDepth) throws Exception{
-
-        Stack<State> pendingStates = new Stack<>();
-        pendingStates.push(initialState);
-
-        ArrayList<State> childrenStates;
-        while(!pendingStates.empty()) {
-
-            State currState = pendingStates.pop();
-
-            if(currState.currentMoveCount > maxDepth) {
-                continue;
-            }
-
-            if(isSolution(currState)) {
-                return getSolutionTrace(currState);
-            }
-
-            childrenStates = getChildrenStates(currState);
-
-            for (State children: childrenStates) {
-                pendingStates.push(children);
-            }
-        }
-
-        throw new Exception("No Solution Found");
     }
 
     private ArrayList<State> getSolutionTrace(State solutionState) {
@@ -157,7 +84,6 @@ public class Board {
     private ArrayList<State> getChildrenStates(State currState) {
 
         ArrayList<State> retStates = new ArrayList<State>();
-
 
         for(int i = 0; i < currState.robots.length; i++) {
             int robotPos = currState.robots[i];
@@ -247,4 +173,111 @@ public class Board {
         return minMoves;
     }
 
+    private boolean isValidRamification(State state, int nbrOfMovesLeft){
+        for(int i = 0; i < state.robots.length; i++){
+            if(minMovesPerTarget[i][state.robots[i]] >= nbrOfMovesLeft){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /***************************************************************/
+    /***                          IDDFS                          ***/
+    /***************************************************************/
+
+    public ArrayList<State> iterativeDFS() {
+        return iterativeDFS(false);
+    }
+
+    public ArrayList<State> iterativeDFS(boolean useCuts) {
+
+        long start = System.nanoTime();
+        for (int i = INITIAL_IDDFS_MAX_DEPTH; i <= IDDFS_MAX_DEPTH; i++) {
+            try {
+                ArrayList<State> iddfsSolution = iddfs(i, useCuts);
+                long elapsed = (System.nanoTime() - start) / 1000000;
+
+                printSolution(iddfsSolution);
+                System.out.println("Elapsed Time: " + elapsed + " ms");
+                return iddfsSolution;
+            } catch(Exception e) {
+                continue;
+            }
+        }
+
+        return new ArrayList<>();
+
+    }
+
+    private ArrayList<State> iddfs(int maxDepth, boolean useCuts) throws Exception{
+
+        Stack<State> pendingStates = new Stack<>();
+        pendingStates.push(initialState);
+
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        ArrayList<State> childrenStates;
+        while(!pendingStates.empty()) {
+
+            State currState = pendingStates.pop();
+
+            if(useCuts && !isValidRamification(currState, maxDepth - currState.currentMoveCount)){
+                continue;
+            }
+
+            if(currState.currentMoveCount > maxDepth || (visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState))) {
+                continue;
+            }
+
+            if(isSolution(currState)) {
+                return getSolutionTrace(currState);
+            }
+
+            childrenStates = getChildrenStates(currState);
+
+            for (State child : childrenStates) {
+                pendingStates.push(child);
+            }
+
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+        }
+
+        throw new Exception("No Solution Found");
+    }
+
+
+    /********************************************************************/
+    /***                         A STAR                               ***/
+    /********************************************************************/
+
+
+    public ArrayList<State> AStar(){
+
+        Queue<State> pQueue = new PriorityQueue<State>();
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        pQueue.add(this.initialState);
+
+        while(!pQueue.isEmpty()){
+
+            State currState = pQueue.poll();
+
+            if(visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState)){
+                continue;
+            }
+
+            if(isSolution(currState)) {
+                return getSolutionTrace(currState);
+            }
+
+            ArrayList<State> childrenStates = getChildrenStates(currState);
+
+            for (State child : childrenStates) {
+                pQueue.add(child);
+            }
+
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+        }
+
+        return new ArrayList<State>();
+    }
 }
