@@ -1,13 +1,6 @@
-package com.angelo;
+package com.angelo.Testing;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-public class IDDFS_Tests {
+public class TestBoards {
 
     static final byte[] NO_WALLS = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
@@ -84,87 +77,5 @@ public class IDDFS_Tests {
             1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, //239
             1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, //255
     };
-
-
-    @Test
-    void testSimplePuzzle(){
-
-        int[] robots = {0};
-
-        int[] targets = {17};
-
-        Board b = new Board(SIMPLE_PUZZLE_WALLS, targets, robots);
-
-        assertEquals(3, b.iterativeDFS().size());
-    }
-
-    /*@Test
-    void testSimplePuzzleInUnsolvablePosition(){
-
-        int[] robots = {0};
-
-        int[] targets = {18};
-
-        Board b = new Board(SIMPLE_PUZZLE_WALLS, targets, robots);
-
-        assertEquals(0, b.iterativeDFS().size());
-    }*/
-
-
-    /*@Test
-    void testLevel10(){
-
-        int[] robots = {177, 235};
-
-        int[] targets = {157, -1};
-
-        Board b = new Board(LEVEL_10_WALLS, targets, robots);
-
-        assertEquals(13, b.iterativeDFS().size());
-    }*/
-
-    /*@Test
-    void testLevel24(){
-
-        int[] robots = {49, 60, 145, 253};
-
-        int[] targets = {30, -1, 172, 22};
-
-        Board b = new Board(LEVEL_24_WALLS, targets, robots);
-
-        assertEquals(22, b.iterativeDFS().size());
-    }*/
-
-    @Test
-    void testMinimumMovesPerCellPerTarget(){
-
-        int[] robots = {};
-
-        int[] targets = {17};
-
-        Board b = new Board(SIMPLE_PUZZLE_WALLS, targets, robots);
-
-        int[] minMoves = b.generateMinimumMovesPerCellPerTarget(0);
-
-        int[] expectedResult = {2, 1, 2147483647, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2147483647, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-
-        assertEquals(Arrays.toString(expectedResult), Arrays.toString(minMoves));
-    }
-
-    @Test
-    void testMinimumMovesPerCellPerTarget_NoWalls(){
-
-        int[] robots = {};
-
-        int[] targets = {};
-
-        Board b = new Board(NO_WALLS, targets, robots);
-
-        int[] minMoves = b.generateMinimumMovesPerCellPerTarget(0);
-
-        int[] expectedResult = {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-
-        assertEquals(Arrays.toString(expectedResult), Arrays.toString(minMoves));
-    }
 
 }
