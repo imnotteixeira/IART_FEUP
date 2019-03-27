@@ -61,9 +61,12 @@ public class Board {
         this.initialState = new State(robots, 0);
     }
 
+    //TODO [DISCUSS] should elapsed time be calculated inside solve for each method?
     public void solve() {
+
         long start = System.nanoTime();
-        ArrayList<State> iddfsSolution = iterativeDFS(2);
+
+        ArrayList<State> iddfsSolution = iterativeDFS();
         long elapsed = (System.nanoTime() - start) / 1000000;
 
         printSolution(iddfsSolution);
@@ -81,19 +84,19 @@ public class Board {
         System.out.println("Found solution with " + (states.size() - 1) + " moves");
     }
 
-    public ArrayList<State> iterativeDFS(int initialDepth) {
+    public ArrayList<State> iterativeDFS() {
 
+        int initialDepth = 2; // TODO make this a static class attribute?
 
         for (int i = initialDepth; i <= MAX_DEPTH; i++) {
             try {
-                return iddfs(initialDepth, i);
+                return iddfs(i);
             } catch(Exception e) {
-                System.out.println("Failed to find solution with depth " + i);
                 continue;
             }
         }
 
-        return new ArrayList<State>();
+        return new ArrayList<>();
 
     }
 
@@ -109,10 +112,7 @@ public class Board {
         return true;
     }
 
-    private ArrayList<State> iddfs(int initialDepth, int maxDepth) throws Exception{
-
-        int currDepth = initialDepth;
-
+    private ArrayList<State> iddfs(int maxDepth) throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
         HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
@@ -138,7 +138,6 @@ public class Board {
                 pendingStates.push(children);
             }
 
-            currDepth = currState.currentMoveCount;
             visitedStatesToMoves.put(currState, currState.currentMoveCount);
 
         }
@@ -171,7 +170,7 @@ public class Board {
             int robotPos = currState.robots[i];
             for (int dir : directions ) {
                 int newPos = robotPos;
-                while(!isObstacle(currState,newPos+dir)){
+                while(canMoveInDirection(currState, newPos, dir)){
                     newPos += dir;
                 }
 
@@ -187,24 +186,37 @@ public class Board {
         return retStates;
     }
 
-    private boolean isObstacle(State currState, int pos) {
+    private boolean canMoveInDirection(State currState, int pos, int dir) {
+        int newPos = pos + dir;
 
-        if(pos < 0 || pos > MAX_POS) {
-            return true;
+        //check if new position is within board position range
+        if(newPos < 0 || newPos > MAX_POS) {
+            return false;
         }
 
-        if(this.walls[pos] > 0) {
-            return true;
+        //check if no wall is in new position
+        if(this.walls[newPos] > 0) {
+            return false;
         }
 
+        // check if by going left the x increases
+        // or if by going right the x decreases
+        // (edge overflow)
+        int posX = pos % BOARD_SIZE;
+        int newPosX = newPos % BOARD_SIZE;
+        if(dir < 0 && newPosX > posX
+                || dir > 0 && newPosX < posX){
+            return false;
+        }
 
+        //check if there is a robot in the new position
         for (int robotPos : currState.robots) {
-            if(robotPos == pos) {
-                return true;
+            if(robotPos == newPos) {
+                return false;
             }
         }
 
-        return false;
+        return true;
 
     }
 
