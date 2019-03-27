@@ -115,7 +115,6 @@ public class Board {
     private ArrayList<State> iddfs(int maxDepth) throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
-        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
         pendingStates.push(initialState);
 
 
@@ -124,7 +123,7 @@ public class Board {
 
             State currState = pendingStates.pop();
 
-            if(currState.currentMoveCount > maxDepth || (visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState))) {
+            if(currState.currentMoveCount > maxDepth) {
                 continue;
             }
 
@@ -137,9 +136,6 @@ public class Board {
             for (State children: childrenStates) {
                 pendingStates.push(children);
             }
-
-            visitedStatesToMoves.put(currState, currState.currentMoveCount);
-
         }
 
         throw new Exception("No Solution Found");

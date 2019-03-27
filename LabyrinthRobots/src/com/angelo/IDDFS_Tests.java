@@ -76,7 +76,7 @@ public class IDDFS_Tests {
         assertEquals(3, b.iterativeDFS().size());
     }
 
-    @Test
+    /*@Test
     void testSimplePuzzleInUnsolvablePosition(){
 
         int[] robots = {0};
@@ -86,7 +86,7 @@ public class IDDFS_Tests {
         Board b = new Board(SIMPLE_PUZZLE_WALLS, targets, robots);
 
         assertEquals(0, b.iterativeDFS().size());
-    }
+    }*/
 
 
     @Test
