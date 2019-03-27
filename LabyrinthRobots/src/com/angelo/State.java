@@ -9,22 +9,27 @@ class State implements Comparable<State>{
     public int currentMoveCount;
     public State parentState = null;
 
-    public State(int[] robots, int currentMoveCount) {
+    private Board board;
 
+    public State(int[] robots, int currentMoveCount) {
         this.robots = robots;
         this.currentMoveCount = currentMoveCount;
+    }
 
+    public State(int[] robots, int currentMoveCount, Board board) {
+        this(robots, currentMoveCount);
+        this.board = board;
     }
 
     public State(State parent, int[] robots, int currentMoveCount) {
         this(robots, currentMoveCount);
         this.parentState = parent;
+        this.board = parent.board;
     }
 
     public static State fromRobotMove(State old, int idx, int pos) {
         int[] newRobots = old.robots.clone();
         newRobots[idx] = pos;
-
         return new State(old, newRobots, old.currentMoveCount+1);
     }
 
@@ -50,7 +55,7 @@ class State implements Comparable<State>{
 
         int total = 0;
         for(int i = 0; i < robots.length; i++) {
-            total += Board.minMovesPerTarget[i][robots[i]];
+            total += this.board.minMovesPerTarget[i][robots[i]];
         }
 
         return total + this.currentMoveCount;

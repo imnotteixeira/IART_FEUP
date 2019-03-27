@@ -40,4 +40,16 @@ public class MinimumMoves {
 
         assertEquals(Arrays.toString(expectedResult), Arrays.toString(minMoves));
     }
+
+    @Test
+    void testMinimumMovesPerCellPerTarget_Helpers(){
+
+        int[] robots = {177, 235};
+
+        int[] targets = {157, -1};
+
+        Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots);
+
+        //System.out.println(Arrays.toString(b.generateMinimumMovesPerCellForHelper()));
+    }
 }

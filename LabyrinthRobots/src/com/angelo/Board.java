@@ -10,7 +10,7 @@ public class Board {
     static final int MAX_POS = BOARD_SIZE*BOARD_SIZE - 1;
 
     static final int[] directions = {-16, 1, 16, -1};
-    static int[][] minMovesPerTarget;
+    public int[][] minMovesPerTarget;
 
     public byte[] walls;
     public int[] targets;
@@ -20,8 +20,8 @@ public class Board {
     public Board(byte[] walls, int[] targets, int[] robots) {
         this.walls = walls;
         this.targets = targets;
-        this.initialState = new State(robots, 0);
-        Board.minMovesPerTarget = getMinMovesPerTarget();
+        this.minMovesPerTarget = getMinMovesPerTarget();
+        this.initialState = new State(robots, 0, this);
     }
 
     public void solve() {
@@ -37,6 +37,17 @@ public class Board {
                 continue;
             }
             result[i] = generateMinimumMovesPerCellPerTarget(i);
+        }
+
+        int[] minimumMovesHelpers = null;
+
+        for(int i = 0; i < this.targets.length; i++){
+            if(this.targets[i] == -1){
+                if(minimumMovesHelpers == null){
+                    minimumMovesHelpers = generateMinimumMovesPerCellForHelper(result);
+                }
+                result[i] = minimumMovesHelpers;
+            }
         }
 
         return result;
@@ -171,6 +182,44 @@ public class Board {
         }
 
         return minMoves;
+    }
+
+    public int[] generateMinimumMovesPerCellForHelper(int[][] minMoves) {
+
+        byte[] sumOfActiveRobotsMins = new byte[BOARD_SIZE*BOARD_SIZE];
+
+        for(int i = 0; i < minMoves.length; i++){
+            if(this.targets[i] == -1) continue;
+            for(int j = 0; j < sumOfActiveRobotsMins.length; j++){
+                if(minMoves[i][j] != Integer.MAX_VALUE) {
+                    sumOfActiveRobotsMins[j] += minMoves[i][j];
+                }
+            }
+        }
+
+        int[] result = new int[BOARD_SIZE*BOARD_SIZE];
+        State dummyState = new State(new int[0], 0);
+
+        for(int i = 0; i < result.length; i++){
+
+            if(sumOfActiveRobotsMins[i] == 0){
+                result[i] = Integer.MAX_VALUE;
+                continue;
+            }
+
+            int accountedDirections = 0;
+            for(int dir : directions) {
+                if (canMoveInDirection(dummyState, i, dir) && sumOfActiveRobotsMins[i+dir] != 0) {
+                    result[i] += sumOfActiveRobotsMins[i+dir];
+                    accountedDirections++;
+                }
+            }
+            if(accountedDirections > 0) {
+                result[i] /= accountedDirections;
+            }
+        }
+
+        return result;
     }
 
     private boolean isValidRamification(State state, int nbrOfMovesLeft){
