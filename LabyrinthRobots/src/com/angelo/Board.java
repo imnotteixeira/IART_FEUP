@@ -63,14 +63,7 @@ public class Board {
 
     //TODO [DISCUSS] should elapsed time be calculated inside solve for each method?
     public void solve() {
-
-        long start = System.nanoTime();
-
-        ArrayList<State> iddfsSolution = iterativeDFS();
-        long elapsed = (System.nanoTime() - start) / 1000000;
-
-        printSolution(iddfsSolution);
-        System.out.println("Elapsed Time: " + elapsed + " ms");
+        iterativeDFS();
     }
 
     private void printSolution(ArrayList<State> states) {
@@ -87,10 +80,15 @@ public class Board {
     public ArrayList<State> iterativeDFS() {
 
         int initialDepth = 2; // TODO make this a static class attribute?
-
+        long start = System.nanoTime();
         for (int i = initialDepth; i <= MAX_DEPTH; i++) {
             try {
-                return iddfs(i);
+                ArrayList<State> iddfsSolution = iddfs(i);
+                long elapsed = (System.nanoTime() - start) / 1000000;
+
+                printSolution(iddfsSolution);
+                System.out.println("Elapsed Time: " + elapsed + " ms");
+                return iddfsSolution;
             } catch(Exception e) {
                 continue;
             }
@@ -116,7 +114,6 @@ public class Board {
 
         Stack<State> pendingStates = new Stack<>();
         pendingStates.push(initialState);
-
 
         ArrayList<State> childrenStates;
         while(!pendingStates.empty()) {
@@ -213,7 +210,41 @@ public class Board {
         }
 
         return true;
+    }
 
+    public int[] generateMinimumMovesPerCellPerTarget(int targetIdx){
+
+        int targetPos = this.targets[targetIdx];
+
+        int[] minMoves = new int[BOARD_SIZE*BOARD_SIZE];
+
+        Arrays.fill(minMoves, Integer.MAX_VALUE);
+
+        minMoves[targetPos] = 0;
+
+        Queue<Integer> pendingCells = new LinkedList<>();
+        pendingCells.add(targetPos);
+
+        State dummyState = new State(new int[0], 0);
+
+        while(!pendingCells.isEmpty()){
+            int currentCell = pendingCells.poll();
+
+            for(int dir : directions){
+                int analysingCell = currentCell;
+                while(canMoveInDirection(dummyState, analysingCell, dir)){
+                    if(minMoves[analysingCell] + 1 < minMoves[analysingCell + dir]) {
+                        if(minMoves[analysingCell + dir] == Integer.MAX_VALUE){
+                            pendingCells.add(analysingCell + dir);
+                        }
+                        minMoves[analysingCell + dir] = minMoves[currentCell] + 1;
+                    }
+                    analysingCell = analysingCell + dir;
+                }
+            }
+        }
+
+        return minMoves;
     }
 
 }
