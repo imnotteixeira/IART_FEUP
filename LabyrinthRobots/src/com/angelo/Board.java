@@ -1,9 +1,6 @@
 package com.angelo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
 
 class State {
 
@@ -53,12 +50,12 @@ public class Board {
 
     static final int[] directions = {-16, 1, 16, -1};
 
-    public boolean[] walls;
+    public byte[] walls;
     public int[] targets;
 
     private State initialState;
 
-    public Board(boolean[] walls, int[] targets, int[] robots) {
+    public Board(byte[] walls, int[] targets, int[] robots) {
         this.walls = walls;
         this.targets = targets;
         this.initialState = new State(robots, 0);
@@ -81,6 +78,7 @@ public class Board {
             }
             System.out.println("\n------\n");
         }
+        System.out.println("Found solution with " + (states.size() - 1) + " moves");
     }
 
     public ArrayList<State> iterativeDFS(int initialDepth) {
@@ -90,6 +88,7 @@ public class Board {
             try {
                 return iddfs(initialDepth, i);
             } catch(Exception e) {
+                System.out.println("Failed to find solution with depth " + i);
                 continue;
             }
         }
@@ -115,8 +114,8 @@ public class Board {
         int currDepth = initialDepth;
 
 
-        Stack<State> pendingStates = new Stack<State>();
-        HashSet<State> visitedStates = new HashSet<State>();
+        Stack<State> pendingStates = new Stack<>();
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
         pendingStates.push(initialState);
 
 
@@ -125,12 +124,11 @@ public class Board {
 
             State currState = pendingStates.pop();
 
-            if(currState.currentMoveCount > maxDepth || visitedStates.contains(currState)) {
+            if(currState.currentMoveCount > maxDepth || (visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState))) {
                 continue;
             }
 
             if(isSolution(currState)) {
-
                 return getSolutionTrace(currState);
             }
 
@@ -141,7 +139,7 @@ public class Board {
             }
 
             currDepth = currState.currentMoveCount;
-            visitedStates.add(currState);
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
 
         }
 
@@ -195,7 +193,7 @@ public class Board {
             return true;
         }
 
-        if(this.walls[pos]) {
+        if(this.walls[pos] > 0) {
             return true;
         }
 

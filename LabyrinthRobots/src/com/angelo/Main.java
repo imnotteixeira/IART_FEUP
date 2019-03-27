@@ -5,45 +5,45 @@ public class Main {
     public static void main(String[] args) {
 
 //        boolean[] walls = {
-//                false, false, true,  false, false, false, false, false, false, false, false, false, false, false, false, false, //15
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //31
-//                false, true,  false, false, false, false, false, false, false, false, false, false, false, false, false, false, //47
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //63
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //79
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //95
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //111
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //127
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //143
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,//159
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //175
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //191
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //207
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //223
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //239
-//                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //255
+//                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //31
+//                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //47
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //63
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //79
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //95
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //111
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //127
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //143
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //159
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //175
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //191
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //207
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //223
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //239
+//                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //255
 //        };
 //
 //        int[] robots = {0};
 //
 //        int[] targets = {17};
 
-        boolean[] walls = {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, //15
-                false, false, false, false, true,  true,  true,  true,  true,  true,  false, false, false, false, false, false, //31
-                false, false, false, true,  false, false, false, false, false, false, true,  false, false, false, false, false, //47
-                false, false, false, true,  false, true,  false, false, false, false, true,  true,  false, false, false, false, //63
-                false, false, true,  false, false, false, false, false, false, false, false, false, true,  false, false, false, //79
-                false, false, true,  false, false, false, false, false, false, false, false, false, false, true,  false, false, //95
-                false, false, false, true,  false, false, true,  true,  true,  false, false, false, false, true,  false, false, //111
-                true,  true,  true,  true,  false, false, true,  false, true,  false, false, false, false, true,  false, false, //127
-                false, false, false, false, false, false, true,  false, true,  true,  false, false, true,  false, true,  false, //143
-                false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, true,  //159
-                false, false, false, true,  false, false, false, true,  false, false, false, false, false, true,  true,  false, //175
-                false, false, false, false, false, true,  false, true,  true,  true,  true,  false, false, true,  false, false, //191
-                true,  false, false, true,  false, false, false, true,  false, true,  false, false, false, true,  false, false, //207
-                false, true,  true,  true,  false, false, false, true,  false, true,  false, false, false, false, true,  false, //223
-                false, false, false, true,  false, false, false, true,  false, false, true,  false, false, false, true,  false, //239
-                false, false, false, true,  false, false, false, true,  false, false, true,  false, false, true,  false, false, //255
+        byte[] walls = {
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
+               0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, //31
+               0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, //47
+               0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, //63
+               0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, //79
+               0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, //95
+               0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, //111
+               1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, //127
+               0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, //143
+               0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, //159
+               0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, //175
+               0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, //191
+               1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, //207
+               0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, //223
+               0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, //239
+               0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, //255
         };
 
         int[] robots = {177, 235};
