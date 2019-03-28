@@ -24,21 +24,25 @@ export default class Cell extends Component {
         }
     }
 
-    onClick = () => {
+    onMouseDown = (e) => {
+
+        let right_click = e.button === 2;
+
         const {onChange, cell_pos} = this.props;
 
         this.setState((prevState) => ({
-            value: (prevState.value + 1) % 12
+            value: right_click ? (12 + prevState.value - 1) % 12 : (12 + prevState.value + 1) % 12
         }), () => {
             onChange(cell_pos, CELL_VALUES[this.state.value]);
         });
 
+        e.stopPropagation();
        
     }
 
     render() {
         return (
-            <div className="cell" onClick={this.onClick}>
+            <div className={"cell cell-" + this.state.value} onMouseDown={this.onMouseDown} onContextMenu={(e) => {e.preventDefault(); return false}}>
                 {CELL_VALUES[this.state.value]}
             </div>
         )

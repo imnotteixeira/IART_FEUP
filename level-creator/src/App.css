@@ -13,6 +13,46 @@
 
 .cell {
     width: 100%;
-    background-color: aqua;
+    background-color: lightblue;
     cursor: pointer;
+}
+
+.cell-0 {
+    /* background-color: blue; */
+}
+.cell-1 {
+    background-color: darkgray;
+    color:white;
+}
+.cell-2 {
+    background-color: blue;
+    color:white;
+}
+.cell-3 {
+    background-color: green;
+}
+.cell-4 {
+    background-color: red;
+}
+.cell-5 {
+    background-color: yellow;
+}
+.cell-6 {
+    background-color: pink;
+}
+.cell-7 {
+    background-color: blue;
+    color:white;
+}
+.cell-8 {
+    background-color: green;
+}
+.cell-9 {
+    background-color: red;
+}
+.cell-10 {
+    background-color: yellow;
+}
+.cell-11 {
+    background-color: pink;
 }
