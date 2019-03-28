@@ -48,6 +48,14 @@ public class AStar {
     }
 
     @Test
+    void testLevel3(){
+
+        Board b = new Board(TestBoards.LEVEL_3_WALLS, TestBoards.LEVEL_3_TARGETS, TestBoards.LEVEL_3_ROBOTS);
+
+        assertEquals(TestBoards.LEVEL_3_OPTIMAL_STEPS + 1, b.AStar().size());
+    }
+
+    @Test
     void testLevel7(){
 
         int[] robots = {100, 137};
