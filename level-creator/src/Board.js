@@ -48,20 +48,21 @@ export default class Board extends Component {
             }
         });
 
+        let walls_str = "{\n";
+        walls.forEach((cell, i) => {
+            walls_str += cell + ", ";
+            if((i + 1) % 16 === 0) {
+                walls_str += "\n"
+            }
+            
+        });
+        walls_str += "\n}"
 
-
-        console.log('====================================');
-        console.log('WALLS');
-        console.log("{" + walls.join(", ") + "}");
-        console.log('====================================');
-        console.log('====================================');
-        console.log('ROBOTS');
-        console.log("{" + robots.join(", ") + "}");
-        console.log('====================================');
-        console.log('====================================');
-        console.log('TARGETS');
-        console.log("{" + targets.join(", ") + "}");
-        console.log('====================================');
+        this.setState({
+            walls: walls_str,
+            robots: robots.join(", "),
+            targets:targets.join(", ")
+        })
     }
 
     render() {
@@ -71,6 +72,16 @@ export default class Board extends Component {
                     {this.createCells()}
                 </div>
                 <button onClick={this.exportLevel}>Export</button>
+                <div>
+                    Walls:
+                    <textarea cols={60} value={this.state.walls}/>
+                    <br/>
+                    Robots:
+                    <textarea cols={60} value={this.state.robots}/>
+                    <br/>
+                    Targets:
+                    <textarea cols={60} value={this.state.targets}/>
+                </div>
             </React.Fragment>
         )
   }
