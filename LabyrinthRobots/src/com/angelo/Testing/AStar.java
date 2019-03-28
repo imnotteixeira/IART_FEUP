@@ -76,7 +76,23 @@ public class AStar {
 
         Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots);
 
+        long start = System.nanoTime();
         assertEquals(13, b.AStar().size());
+        System.out.println(System.nanoTime() - start);
+    }
+
+    @Test
+    void testLevel10_strict(){
+
+        int[] robots = {177, 235};
+
+        int[] targets = {157, -1};
+
+        Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots, true);
+
+        long start = System.nanoTime();
+        assertEquals(13, b.AStar().size());
+        System.out.println(System.nanoTime() - start);
     }
 
     @Test
@@ -103,4 +119,15 @@ public class AStar {
         assertEquals(23, b.AStar().size());
     }
 
+    @Test
+    void testLevel24_strict(){
+
+        int[] robots = {49, 60, 145, 253};
+
+        int[] targets = {30, -1, 172, 22};
+
+        Board b = new Board(TestBoards.LEVEL_24_WALLS, targets, robots, true);
+
+        assertEquals(23, b.AStar().size());
+    }
 }

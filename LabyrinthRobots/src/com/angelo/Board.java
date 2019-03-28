@@ -9,6 +9,8 @@ public class Board {
     static final int BOARD_SIZE = 16;
     static final int MAX_POS = BOARD_SIZE*BOARD_SIZE - 1;
 
+    private int maxSteps;
+
     static final int[] directions = {-16, 1, 16, -1};
     public int[][] minMovesPerTarget;
 
@@ -17,11 +19,32 @@ public class Board {
 
     private State initialState;
 
-    public Board(byte[] walls, int[] targets, int[] robots) {
+    public Board(byte[] walls, int[] targets, int[] robots, boolean strict) {
         this.walls = walls;
         this.targets = targets;
-        this.minMovesPerTarget = getMinMovesPerTarget();
         this.initialState = new State(robots, 0, this);
+        this.maxSteps = 0;
+
+        if(strict) {
+            this.minMovesPerTarget = getMinMovesPerTarget_strict();
+        } else {
+            this.minMovesPerTarget = getMinMovesPerTarget();
+        }
+
+        System.out.println(maxSteps);
+
+        for (int i = 0; i < this.minMovesPerTarget[0].length; i++) {
+            System.out.format("%10d, ", this.minMovesPerTarget[0][i]);
+//            System.out.print(this.minMovesPerTarget[0][i] + ", ");
+            if((i+1) % 16 == 0) {
+                System.out.println(" ");
+            }
+        }
+
+    }
+
+    public Board(byte[] walls, int[] targets, int[] robots) {
+        this(walls, targets, robots, false);
     }
 
     public void solve() {
@@ -37,6 +60,31 @@ public class Board {
                 continue;
             }
             result[i] = generateMinimumMovesPerCellPerTarget(i);
+        }
+
+        int[] minimumMovesHelpers = null;
+
+        for(int i = 0; i < this.targets.length; i++){
+            if(this.targets[i] == -1){
+                if(minimumMovesHelpers == null){
+                    minimumMovesHelpers = generateMinimumMovesPerCellForHelper(result);
+                }
+                result[i] = minimumMovesHelpers;
+            }
+        }
+
+        return result;
+    }
+
+    private int[][] getMinMovesPerTarget_strict(){
+
+        int[][] result = new int[this.targets.length][BOARD_SIZE*BOARD_SIZE];
+
+        for(int i = 0; i < this.targets.length; i++){
+            if(this.targets[i] == -1){
+                continue;
+            }
+            result[i] = generateMinimumMovesPerCellPerTarget_strict(i);
         }
 
         int[] minimumMovesHelpers = null;
@@ -175,9 +223,60 @@ public class Board {
                             pendingCells.add(analysingCell + dir);
                         }
                         minMoves[analysingCell + dir] = minMoves[currentCell] + 1;
+                        if(minMoves[currentCell]+1 > this.maxSteps) {
+                            this.maxSteps = minMoves[currentCell] + 1;
+                        }
                     }
                     analysingCell = analysingCell + dir;
                 }
+            }
+        }
+
+        return minMoves;
+    }
+
+    public int[] generateMinimumMovesPerCellPerTarget_strict(int targetIdx){
+
+        int targetPos = this.targets[targetIdx];
+
+        int[] minMoves = new int[BOARD_SIZE*BOARD_SIZE];
+
+        Arrays.fill(minMoves, Integer.MAX_VALUE);
+
+        minMoves[targetPos] = 0;
+
+        Queue<Integer> pendingCells = new LinkedList<>();
+        pendingCells.add(targetPos);
+
+        State dummyState = new State(new int[0], 0);
+
+        while(!pendingCells.isEmpty()){
+            int currentCell = pendingCells.poll();
+
+            for(int dir : directions){
+                int analysingCell = currentCell;
+
+                //only fill cells if the opposite direction allows stopping in current cell
+                if(!canMoveInDirection(dummyState, analysingCell, -dir)) {
+                    while(canMoveInDirection(dummyState, analysingCell, dir)){
+                        if(minMoves[analysingCell] + 1 < minMoves[analysingCell + dir]) {
+                            if(minMoves[analysingCell + dir] == Integer.MAX_VALUE){
+                                pendingCells.add(analysingCell + dir);
+                            }
+                            minMoves[analysingCell + dir] = minMoves[currentCell] + 1;
+                        }
+                        analysingCell = analysingCell + dir;
+                    }
+                }
+
+            }
+        }
+
+        int[] nonStrictMinMoves = generateMinimumMovesPerCellPerTarget(targetIdx);
+
+        for (int i = 0; i < minMoves.length; i++) {
+            if(minMoves[i] == Integer.MAX_VALUE && nonStrictMinMoves[i] != Integer.MAX_VALUE) {
+                minMoves[i] = nonStrictMinMoves[i] * this.maxSteps;
             }
         }
 

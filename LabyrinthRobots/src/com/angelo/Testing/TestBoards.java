@@ -2,7 +2,7 @@ package com.angelo.Testing;
 
 public class TestBoards {
 
-    static final byte[] NO_WALLS = {
+    public static final byte[] NO_WALLS = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //31
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //47
@@ -21,7 +21,7 @@ public class TestBoards {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //255
     };
 
-    static final byte[] SIMPLE_PUZZLE_WALLS = {
+    public static final byte[] SIMPLE_PUZZLE_WALLS = {
             0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //31
             0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //47
@@ -40,7 +40,7 @@ public class TestBoards {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //255
     };
 
-    static final byte[] LEVEL_1_WALLS = {
+    public static final byte[] LEVEL_1_WALLS = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -59,11 +59,11 @@ public class TestBoards {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     };
 
-    static final int[] LEVEL_1_ROBOTS = {162};
-    static final int[] LEVEL_1_TARGETS = {59};
-    static final int LEVEL_1_OPTIMAL_STEPS = 9;
+    public static final int[] LEVEL_1_ROBOTS = {162};
+    public static final int[] LEVEL_1_TARGETS = {59};
+    public static final int LEVEL_1_OPTIMAL_STEPS = 9;
 
-    static final byte[] LEVEL_2_WALLS = {
+    public static final byte[] LEVEL_2_WALLS = {
             1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -83,12 +83,12 @@ public class TestBoards {
     };
 
 
-    static final int[] LEVEL_2_ROBOTS = {168};
-    static  final int[] LEVEL_2_TARGETS = {131};
-    static final int LEVEL_2_OPTIMAL_STEPS = 8;
+    public static final int[] LEVEL_2_ROBOTS = {168};
+    public static  final int[] LEVEL_2_TARGETS = {131};
+    public static final int LEVEL_2_OPTIMAL_STEPS = 8;
 
 
-    static final byte[] LEVEL_3_WALLS = {
+    public static final byte[] LEVEL_3_WALLS = {
             1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
@@ -108,11 +108,11 @@ public class TestBoards {
 
     };
 
-    static final int[] LEVEL_3_ROBOTS = {26};
-    static  final int[] LEVEL_3_TARGETS = {2};
-    static final int LEVEL_3_OPTIMAL_STEPS = 10;
+    public static final int[] LEVEL_3_ROBOTS = {26};
+    public static  final int[] LEVEL_3_TARGETS = {2};
+    public static final int LEVEL_3_OPTIMAL_STEPS = 10;
 
-    static final byte[] LEVEL_7_WALLS = {
+    public static final byte[] LEVEL_7_WALLS = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //15
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //31
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //47
@@ -131,7 +131,7 @@ public class TestBoards {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //255
     };
 
-    static final byte[] LEVEL_10_WALLS = {
+    public static final byte[] LEVEL_10_WALLS = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
             0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, //31
             0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, //47
@@ -150,7 +150,11 @@ public class TestBoards {
             0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, //255
     };
 
-    static final byte[] LEVEL_18_WALLS = {
+    public static final int[] LEVEL_10_ROBOTS = {177, 235};
+
+    public static final int[] LEVEL_10_TARGETS = {157, -1};
+
+    public static final byte[] LEVEL_18_WALLS = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //15
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //31
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //47
@@ -169,7 +173,7 @@ public class TestBoards {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //255
     };
 
-    static final byte[] LEVEL_24_WALLS = {
+    public static final byte[] LEVEL_24_WALLS = {
             1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, //15
             1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, //31
             0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, //47

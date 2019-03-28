@@ -56,4 +56,16 @@ public class IDDFSWithCuts {
 
         assertEquals(10, b.iterativeDFS(true).size());
     }
+
+    @Test
+    void testLevel24(){
+
+        int[] robots = {49, 60, 145, 253};
+
+        int[] targets = {30, -1, 172, 22};
+
+        Board b = new Board(TestBoards.LEVEL_24_WALLS, targets, robots);
+
+        assertEquals(23, b.iterativeDFS(true).size());
+    }
 }
