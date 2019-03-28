@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.board {
+    font-size: 0.8em;
+    width: 55rem;
+    height: 55rem;
+    display: grid;
+    grid-template-columns: 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25% 6.25%;
+    grid-gap: 4px;
+}
+
+.cell {
+    width: 100%;
+    background-color: aqua;
+    cursor: pointer;
+}
