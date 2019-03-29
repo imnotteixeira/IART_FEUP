@@ -35,7 +35,6 @@ public class Board {
 
         for (int i = 0; i < this.minMovesPerTarget[0].length; i++) {
             System.out.format("%10d, ", this.minMovesPerTarget[0][i]);
-//            System.out.print(this.minMovesPerTarget[0][i] + ", ");
             if((i+1) % 16 == 0) {
                 System.out.println(" ");
             }
@@ -427,5 +426,60 @@ public class Board {
         }
 
         return new ArrayList<State>();
+    }
+
+
+    /********************************************************************/
+    /***                            DFS                               ***/
+    /********************************************************************/
+
+    public ArrayList<State> dfs_wrapper() {
+
+        long start = System.nanoTime();
+
+        try {
+            ArrayList<State> dfsSolution = dfs();
+            long elapsed = (System.nanoTime() - start) / 1000000;
+
+            System.out.println("Elapsed Time: " + elapsed + " ms");
+            printSolution(dfsSolution);
+            return dfsSolution;
+        } catch(Exception e) {
+            return new ArrayList<>();
+        }
+
+
+
+    }
+
+    private ArrayList<State> dfs() throws Exception{
+
+        Stack<State> pendingStates = new Stack<>();
+        pendingStates.push(initialState);
+
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        ArrayList<State> childrenStates;
+        while(!pendingStates.empty()) {
+
+            State currState = pendingStates.pop();
+
+            if(visitedStatesToMoves.containsKey(currState)) {
+                continue;
+            }
+
+            if(isSolution(currState)) {
+                return getSolutionTrace(currState);
+            }
+
+            childrenStates = getChildrenStates(currState);
+
+            for (State child : childrenStates) {
+                pendingStates.push(child);
+            }
+
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+        }
+
+        throw new Exception("No Solution Found");
     }
 }
