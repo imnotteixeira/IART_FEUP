@@ -6,6 +6,8 @@ document.documentElement.style.setProperty("--robot-movement-speed", MOVEMENT_DU
 
 const board = document.getElementById("board");
 const executedMovesDOM = document.getElementById("executedMovesNbr");
+let periodicRun;
+let prevStepFunc, nextStepFunc;
 
 const drawBoard = (walls, targets) => {
 
@@ -36,6 +38,7 @@ const createRobots = (robots) => robots.map((robotPosition, i) => {
 },[]);
 
 const updateRobotPositions = (robots, newPositions) => {
+    if(!newPositions) return;
     if(robots.length !== newPositions.length){
         console.error("Number of positions provided does not match with number of robots");
         return;
@@ -49,13 +52,34 @@ const updateRobotPositions = (robots, newPositions) => {
 const runSequence = (robots, positionSequence) => {
     let i = 0;
 
-    let periodicRun = setInterval(() => {
+    periodicRun = setInterval(() => {
         if(i == positionSequence.length - 1) clearInterval(periodicRun);
     
-        updateRobotPositions(robots, positionSequence[i]);
-        executedMovesDOM.innerHTML = i+1;
         i++;
+        updateRobotPositions(robots, positionSequence[i]);
+        executedMovesDOM.innerHTML = i;
     }, MOVEMENT_DURATION + MOVEMENT_INTERVAL);
+}
+
+const runSequenceManually = (robots, positionSequence) => {
+    let i = 0;
+    document.getElementById("run-manually-controls").style.display = "block";
+
+    prevStepFunc = document.getElementById("prev-step").addEventListener('click', () => {
+        if(i > 0){
+            i--;
+            updateRobotPositions(robots, positionSequence[i]);
+            executedMovesDOM.innerHTML = i;
+        }
+    })
+
+    nextStepFunc = document.getElementById("next-step").addEventListener('click', () => {
+        if(i < positionSequence.length - 1){
+            i++;
+            updateRobotPositions(robots, positionSequence[i]);
+            executedMovesDOM.innerHTML = i;
+        }
+    })
 }
 
 /////////////////////////////////////////////////////////////////
@@ -84,9 +108,8 @@ const boardWalls = [
 
 const targetPositions = [30, -1, 172, 22];
 
-const initialRobotPositions = [49, 60, 145, 253];
-
 const robotsPositionSequence = [
+    [49, 60, 145, 253],
     [49, 108, 145, 253],
     [49, 108, 154, 253],
     [49, 108, 138, 253],
@@ -116,7 +139,39 @@ const robotsPositionSequence = [
 
 drawBoard(boardWalls, targetPositions);
 
-const robots = createRobots(initialRobotPositions);
+const robots = createRobots(robotsPositionSequence[0]);
 
-runSequence(robots, robotsPositionSequence);
+const STATES = {STOPPED: 0, AUTOMATIC: 1, MANUAL: 2};
+
+let state = STATES.STOPPED;
+
+const resetBoard = () => {
+    clearInterval(periodicRun);
+    updateRobotPositions(robots, robotsPositionSequence[0]);
+    document.getElementById("run-manually-controls").style.display = "none";
+    document.getElementById("prev-step").removeEventListener('click', prevStepFunc);
+    document.getElementById("next-step").removeEventListener('click', nextStepFunc);
+    document.getElementById("run-automatic").classList.remove("selected");
+    document.getElementById("run-manually").classList.remove("selected");
+    executedMovesDOM.innerHTML = 0;
+    state = STATES.STOPPED;
+}
+
+document.getElementById("run-automatic").addEventListener('click', () => {
+    if(state != STATES.STOPPED){
+        resetBoard();
+    }
+    runSequence(robots, robotsPositionSequence);
+    document.getElementById("run-automatic").classList.add("selected");
+    state = STATES.AUTOMATIC;
+})
+
+document.getElementById("run-manually").addEventListener('click', () => {
+    if(state != STATES.STOPPED){
+        resetBoard();
+    }
+    runSequenceManually(robots, robotsPositionSequence);
+    document.getElementById("run-manually").classList.add("selected");
+    state = STATES.MANUAL;
+})
 

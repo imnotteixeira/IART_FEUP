@@ -8,9 +8,37 @@
     <title>Labyrinth Robots</title>
 </head>
 <body>
-
-    <h1 id="page-title">Labyrinth Robots</h1>
-    <h2 id="executedMoves">Executed moves: <span id="executedMovesNbr">0</span></h2>
+    <div id="info">
+        <h1>Labyrinth Robots</h1>
+        <div>
+            <label>Select level: </label><select>
+                <option>Simplest Level</option>
+                <option>Level 7</option>
+                <option>Level 10</option>
+                <option>Level 18</option>
+                <option>Level 24</option>
+            </select>
+        </div>
+        <div>
+            <label>Select algorithm: </label><select>
+                <option>DFS</option>
+                <option>IDDFS</option>
+                <option>A*</option>
+                <option>A* with a non admissible heuristic</option>
+            </select>
+        </div>
+        <h3>Algorithm ran in X ms</h3>
+        <h2>Executed moves: <span id="executedMovesNbr">0</span></h2>
+        <div>
+            <button id="run-automatic">Run Automatic</button>
+            <button id="run-manually">Run Manually</button>
+            <div id="run-manually-controls" style="display: none;">
+                <br>
+                <button id="prev-step">Previous step</button>
+                <button id="next-step">Next step</button>
+            </div>
+        </div>
+    </div>
     <div id="board"></div>
     <script src="user-interface.js"></script>
 </body>

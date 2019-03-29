@@ -21,7 +21,7 @@ body, html {
     width: 50vh;
     height: 50vh;
     position: absolute;
-    bottom: 10vh;
+    top: 40vh;
     left: 50%;
     transform: translate(-50%,0);
     background-color: white;
@@ -39,6 +39,7 @@ body, html {
     margin-top:3.125%;
     transform: translate(-50%, -50%);
     border-radius: 10%;
+    border: 0.5px #444 solid;
     transition: left var(--robot-movement-speed) ease-in-out, top var(--robot-movement-speed) ease-in-out;
 }
 
@@ -114,16 +115,35 @@ body, html {
 
 /*///////////////////// OTHER PAGE ELEMENTS ////////////////////////*/
 
-body > h1, body > h2, body > h3 {
+#info {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
+    top: 0;
+    width: 100vw;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;    
 }
 
-#executedMoves {
-    bottom: 65vh;
+button {
+    background-color: white;
+    border: none;
+    height: 2em;
+    width: 8em;
+    cursor: pointer;
 }
 
-#page-title {
-    top: 10vh;
+button:hover {
+    background-color: #ddd;
+}
+
+button.selected {
+    background-color: #75aaff;
+}
+
+h2, h3{
+    margin: 0;
 }
