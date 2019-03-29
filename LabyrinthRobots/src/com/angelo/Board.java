@@ -31,14 +31,14 @@ public class Board {
             this.minMovesPerTarget = getMinMovesPerTarget();
         }
 
-        System.out.println(maxSteps);
-
-        for (int i = 0; i < this.minMovesPerTarget[0].length; i++) {
-            System.out.format("%10d, ", this.minMovesPerTarget[0][i]);
-            if((i+1) % 16 == 0) {
-                System.out.println(" ");
-            }
-        }
+//        System.out.println(maxSteps);
+//
+//        for (int i = 0; i < this.minMovesPerTarget[0].length; i++) {
+//            System.out.format("%10d, ", this.minMovesPerTarget[0][i]);
+//            if((i+1) % 16 == 0) {
+//                System.out.println(" ");
+//            }
+//        }
 
     }
 
@@ -100,7 +100,7 @@ public class Board {
         return result;
     }
 
-    private void printSolution(ArrayList<State> states) {
+    public void printSolution(ArrayList<State> states) {
         for (int i = states.size() - 1; i >= 0 ; i--) {
             int[] robots = states.get(i).robots;
             for (int j = 0; j < robots.length; j++) {
