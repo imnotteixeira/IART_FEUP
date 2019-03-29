@@ -84,9 +84,9 @@ const boardWalls = [
 
 const targetPositions = [30, -1, 172, 22];
 
-const robotPositions = [49, 60, 145, 253];
+const initialRobotPositions = [49, 60, 145, 253];
 
-const sequenceRobotPositions = [
+const robotsPositionSequence = [
     [49, 60, 145, 29],
     [49, 56, 145, 29],
     [49, 56, 145, 253],
@@ -102,7 +102,7 @@ const sequenceRobotPositions = [
 
 drawBoard(boardWalls, targetPositions);
 
-const robots = createRobots(robotPositions);
+const robots = createRobots(initialRobotPositions);
 
-runSequence(robots, sequenceRobotPositions);
+runSequence(robots, robotsPositionSequence);
 
