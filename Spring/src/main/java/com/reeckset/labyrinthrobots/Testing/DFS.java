@@ -1,14 +1,14 @@
 package com.reeckset.labyrinthrobots.Testing;
 
 import com.reeckset.labyrinthrobots.Board;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class DFS {
 
     @Test
-    void testLevel10(){
+    public void testLevel10(){
 
         int[] robots = {177, 235};
 

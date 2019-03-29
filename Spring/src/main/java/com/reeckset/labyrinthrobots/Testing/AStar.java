@@ -1,14 +1,15 @@
 package com.reeckset.labyrinthrobots.Testing;
 
 import com.reeckset.labyrinthrobots.Board;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 public class AStar {
 
     @Test
-    void testSimplePuzzle(){
+    public void testSimplePuzzle(){
 
         int[] robots = {0};
 
@@ -20,7 +21,7 @@ public class AStar {
     }
 
     /*@Test
-    void testSimplePuzzleInUnsolvablePosition(){
+    public void testSimplePuzzleInUnsolvablePosition(){
 
         int[] robots = {0};
 
@@ -32,7 +33,7 @@ public class AStar {
     }*/
 
     @Test
-    void testLevel1(){
+    public void testLevel1(){
 
         Board b = new Board(TestBoards.LEVEL_1_WALLS, TestBoards.LEVEL_1_TARGETS, TestBoards.LEVEL_1_ROBOTS);
 
@@ -40,7 +41,7 @@ public class AStar {
     }
 
     @Test
-    void testLevel2(){
+    public void testLevel2(){
 
         Board b = new Board(TestBoards.LEVEL_2_WALLS, TestBoards.LEVEL_2_TARGETS, TestBoards.LEVEL_2_ROBOTS);
 
@@ -48,7 +49,7 @@ public class AStar {
     }
 
     @Test
-    void testLevel3(){
+    public void testLevel3(){
 
         Board b = new Board(TestBoards.LEVEL_3_WALLS, TestBoards.LEVEL_3_TARGETS, TestBoards.LEVEL_3_ROBOTS);
 
@@ -56,7 +57,7 @@ public class AStar {
     }
 
     @Test
-    void testLevel7(){
+    public void testLevel7(){
 
         int[] robots = {100, 137};
 
@@ -68,7 +69,7 @@ public class AStar {
     }
 
     @Test
-    void testLevel10(){
+    public void testLevel10(){
 
         int[] robots = {177, 235};
 
@@ -82,21 +83,21 @@ public class AStar {
     }
 
     @Test
-    void testLevel10_strict(){
+    public void testLevel10_strict(){
 
         int[] robots = {177, 235};
 
         int[] targets = {157, -1};
 
-        Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots, true);
+        Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots);
 
         long start = System.nanoTime();
-        assertEquals(13, b.AStar().size());
+        assertEquals(13, b.AStar(true).size());
         System.out.println(System.nanoTime() - start);
     }
 
     @Test
-    void testLevel18(){
+    public void testLevel18(){
 
         int[] robots = {150, 153, 93};
 
@@ -108,7 +109,7 @@ public class AStar {
     }
 
     @Test
-    void testLevel24(){
+    public void testLevel24(){
 
         int[] robots = {49, 60, 145, 253};
 
@@ -120,14 +121,14 @@ public class AStar {
     }
 
     @Test
-    void testLevel24_strict(){
+    public void testLevel24_strict(){
 
         int[] robots = {49, 60, 145, 253};
 
         int[] targets = {30, -1, 172, 22};
 
-        Board b = new Board(TestBoards.LEVEL_24_WALLS, targets, robots, true);
+        Board b = new Board(TestBoards.LEVEL_24_WALLS, targets, robots);
 
-        assertEquals(23, b.AStar().size());
+        assertEquals(23, b.AStar(true).size());
     }
 }

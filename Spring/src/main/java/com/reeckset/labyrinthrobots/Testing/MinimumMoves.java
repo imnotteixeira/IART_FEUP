@@ -1,16 +1,16 @@
 package com.reeckset.labyrinthrobots.Testing;
 
 import com.reeckset.labyrinthrobots.Board;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class MinimumMoves {
 
     @Test
-    void testMinimumMovesPerCellPerTarget(){
+    public void testMinimumMovesPerCellPerTarget(){
 
         int[] robots = {};
 
@@ -26,7 +26,7 @@ public class MinimumMoves {
     }
 
     @Test
-    void testMinimumMovesPerCellPerTarget_NoWalls(){
+    public void testMinimumMovesPerCellPerTarget_NoWalls(){
 
         int[] robots = {};
 
@@ -42,7 +42,7 @@ public class MinimumMoves {
     }
 
     @Test
-    void testMinimumMovesPerCellPerTarget_Helpers(){
+    public void testMinimumMovesPerCellPerTarget_Helpers(){
 
         int[] robots = {177, 235};
 

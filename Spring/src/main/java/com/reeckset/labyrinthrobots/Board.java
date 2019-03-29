@@ -12,42 +12,22 @@ public class Board {
     private int maxSteps;
 
     static final int[] directions = {-16, 1, 16, -1};
-    public int[][] minMovesPerTarget;
+    public int[][] minMovesPerTarget, minMovesPerTargetStrict;
 
     public byte[] walls;
     public int[] targets;
 
     private State initialState;
 
-    public Board(byte[] walls, int[] targets, int[] robots, boolean strict) {
+    public Board(byte[] walls, int[] targets, int[] robots) {
         this.walls = walls;
         this.targets = targets;
-        this.initialState = new State(robots, 0, this);
+        this.initialState = new State(robots, 0);
         this.maxSteps = 0;
 
-        if(strict) {
-            this.minMovesPerTarget = getMinMovesPerTarget_strict();
-        } else {
-            this.minMovesPerTarget = getMinMovesPerTarget();
-        }
+        this.minMovesPerTargetStrict = getMinMovesPerTarget_strict();
+        this.minMovesPerTarget = getMinMovesPerTarget();
 
-        System.out.println(maxSteps);
-
-        for (int i = 0; i < this.minMovesPerTarget[0].length; i++) {
-            System.out.format("%10d, ", this.minMovesPerTarget[0][i]);
-            if((i+1) % 16 == 0) {
-                System.out.println(" ");
-            }
-        }
-
-    }
-
-    public Board(byte[] walls, int[] targets, int[] robots) {
-        this(walls, targets, robots, false);
-    }
-
-    public void solve() {
-        iterativeDFS();
     }
 
     private int[][] getMinMovesPerTarget(){
@@ -100,7 +80,7 @@ public class Board {
         return result;
     }
 
-    private void printSolution(ArrayList<State> states) {
+    public void printSolution(ArrayList<State> states) {
         for (int i = states.size() - 1; i >= 0 ; i--) {
             int[] robots = states.get(i).robots;
             for (int j = 0; j < robots.length; j++) {
@@ -329,6 +309,28 @@ public class Board {
         return true;
     }
 
+    public String toJSON(){
+        String result = "{\"walls\": [";
+        for(int i = 0; i < this.walls.length; i++){
+            result += this.walls[i];
+            if(i < (this.walls.length - 1))
+            result += ", ";
+        }
+        result += "], \"targets\": [";
+        for(int i = 0; i < this.targets.length; i++){
+            result += this.targets[i];
+            if(i < (this.targets.length - 1))
+                result += ", ";
+        }
+        result += "], \"robots\": [";
+        for(int i = 0; i < this.initialState.robots.length; i++){
+            result += this.initialState.robots[i];
+            if(i < (this.initialState.robots.length - 1))
+                result += ", ";
+        }
+        return result + "]}";
+    }
+
     /***************************************************************/
     /***                          IDDFS                          ***/
     /***************************************************************/
@@ -397,10 +399,16 @@ public class Board {
     /***                         A STAR                               ***/
     /********************************************************************/
 
+    public ArrayList<State> AStar(){ return AStar(false); }
 
-    public ArrayList<State> AStar(){
+    public ArrayList<State> AStar(boolean useStrict){
 
-        Queue<State> pQueue = new PriorityQueue<State>();
+        Queue<State> pQueue;
+        if(useStrict){
+            pQueue = new PriorityQueue<State>(new StateComparatorStrict(this));
+        }else{
+            pQueue = new PriorityQueue<State>(new StateComparator(this));
+        }
         HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
         pQueue.add(this.initialState);
 

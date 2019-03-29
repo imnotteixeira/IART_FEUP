@@ -2,29 +2,21 @@ package com.reeckset.labyrinthrobots;
 
 import java.util.Arrays;
 
-class State implements Comparable<State>{
+class State{
 
     public int[] robots;
 
     public int currentMoveCount;
     public State parentState = null;
 
-    private Board board;
-
     public State(int[] robots, int currentMoveCount) {
         this.robots = robots;
         this.currentMoveCount = currentMoveCount;
     }
 
-    public State(int[] robots, int currentMoveCount, Board board) {
-        this(robots, currentMoveCount);
-        this.board = board;
-    }
-
     public State(State parent, int[] robots, int currentMoveCount) {
         this(robots, currentMoveCount);
         this.parentState = parent;
-        this.board = parent.board;
     }
 
     public static State fromRobotMove(State old, int idx, int pos) {
@@ -46,18 +38,13 @@ class State implements Comparable<State>{
         return Arrays.hashCode(robots);
     }
 
-    @Override
-    public int compareTo(State o) {
-        return this.getValue().compareTo(o.getValue());
-    }
-
-    private Integer getValue(){
-
-        int total = 0;
-        for(int i = 0; i < robots.length; i++) {
-            total += this.board.minMovesPerTarget[i][robots[i]];
+    public String toJSON(){
+        String result = "[";
+        for(int i = 0; i < this.robots.length; i++){
+            result += this.robots[i];
+            if(i < (this.robots.length - 1))
+                result += ", ";
         }
-
-        return total + this.currentMoveCount;
+        return result + "]";
     }
 }

@@ -1,14 +1,14 @@
 package com.reeckset.labyrinthrobots.Testing;
 
 import com.reeckset.labyrinthrobots.Board;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class IDDFSWithCuts {
 
     @Test
-    void testSimplePuzzle(){
+    public void testSimplePuzzle(){
 
         int[] robots = {0};
 
@@ -20,7 +20,7 @@ public class IDDFSWithCuts {
     }
 
     @Test
-    void testLevel7(){
+    public void testLevel7(){
 
         int[] robots = {100, 137};
 
@@ -32,7 +32,7 @@ public class IDDFSWithCuts {
     }
 
     @Test
-    void testLevel10(){
+    public void testLevel10(){
 
         int[] robots = {177, 235};
 
@@ -44,7 +44,7 @@ public class IDDFSWithCuts {
     }
 
     @Test
-    void testLevel18(){
+    public void testLevel18(){
 
         int[] robots = {150, 153, 93};
 
@@ -56,7 +56,7 @@ public class IDDFSWithCuts {
     }
 
     @Test
-    void testLevel24(){
+    public void testLevel24(){
 
         int[] robots = {49, 60, 145, 253};
 
