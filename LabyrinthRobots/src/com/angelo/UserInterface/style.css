@@ -147,3 +147,42 @@ button.selected {
 h2, h3{
     margin: 0;
 }
+
+select{
+    height: 2em;
+    width: 18em;
+}
+
+#run-controls {
+    display: flex;
+    align-items: flex-end;
+}
+
+#run-manually-controls, #run-automatic-controls {
+    padding-left: 1em;
+    padding-right: 1em;
+    align-items: center;
+}
+
+#run-manually-controls button {
+    background-color: transparent;
+    border: 1px white solid;
+    color: white;
+    width: 2em;
+}
+
+#run-automatic-controls label{
+    padding-right: 1em
+}
+
+.reset-notifier {
+    width: 50vh;
+    height: 50vh;
+    position: absolute;
+    top: 40vh;
+    left: 50%;
+    opacity: 1;
+    transform: translate(-50%,0);
+    background-color: white;
+    transition: opacity 0.6s ease-out;
+}

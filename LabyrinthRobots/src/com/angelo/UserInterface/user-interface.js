@@ -1,5 +1,5 @@
-const MOVEMENT_DURATION = 500; //in miliseconds - actual movement time
-const MOVEMENT_INTERVAL = 500;  //in miliseconds - interval between each movement
+let MOVEMENT_DURATION = 500; //in miliseconds - actual movement time
+let MOVEMENT_INTERVAL = 500;  //in miliseconds - interval between each movement
 
 
 document.documentElement.style.setProperty("--robot-movement-speed", MOVEMENT_DURATION / 1000 + "s");
@@ -52,8 +52,11 @@ const updateRobotPositions = (robots, newPositions) => {
 const runSequence = (robots, positionSequence) => {
     let i = 0;
 
+    document.getElementById("run-automatic").classList.add("selected");
+    document.getElementById("run-automatic-controls").style.display = "flex";
+
     periodicRun = setInterval(() => {
-        if(i == positionSequence.length - 1) clearInterval(periodicRun);
+        if(i == positionSequence.length - 2) clearInterval(periodicRun);
     
         i++;
         updateRobotPositions(robots, positionSequence[i]);
@@ -63,7 +66,9 @@ const runSequence = (robots, positionSequence) => {
 
 const runSequenceManually = (robots, positionSequence) => {
     let i = 0;
+
     document.getElementById("run-manually-controls").style.display = "block";
+    document.getElementById("run-manually").classList.add("selected");
 
     prevStepFunc = document.getElementById("prev-step").addEventListener('click', () => {
         if(i > 0){
@@ -149,29 +154,37 @@ const resetBoard = () => {
     clearInterval(periodicRun);
     updateRobotPositions(robots, robotsPositionSequence[0]);
     document.getElementById("run-manually-controls").style.display = "none";
+    document.getElementById("run-automatic-controls").style.display = "none";
     document.getElementById("prev-step").removeEventListener('click', prevStepFunc);
     document.getElementById("next-step").removeEventListener('click', nextStepFunc);
     document.getElementById("run-automatic").classList.remove("selected");
     document.getElementById("run-manually").classList.remove("selected");
+
+    let resetNotifier = document.createElement("div");
+    resetNotifier.classList.add("reset-notifier");
+    document.body.appendChild(resetNotifier);
+    setTimeout(() => resetNotifier.style.opacity = 0, 10);
+    setTimeout(() => resetNotifier.parentNode.removeChild(resetNotifier), 1000);
+
     executedMovesDOM.innerHTML = 0;
     state = STATES.STOPPED;
 }
 
 document.getElementById("run-automatic").addEventListener('click', () => {
-    if(state != STATES.STOPPED){
-        resetBoard();
-    }
+    resetBoard();
     runSequence(robots, robotsPositionSequence);
-    document.getElementById("run-automatic").classList.add("selected");
     state = STATES.AUTOMATIC;
 })
 
 document.getElementById("run-manually").addEventListener('click', () => {
-    if(state != STATES.STOPPED){
-        resetBoard();
-    }
+    resetBoard();
     runSequenceManually(robots, robotsPositionSequence);
-    document.getElementById("run-manually").classList.add("selected");
     state = STATES.MANUAL;
 })
 
+document.getElementById("speed_slider").oninput = function() {
+    MOVEMENT_DURATION = 1000 / this.value; 
+    MOVEMENT_INTERVAL = 1000 / this.value; 
+    resetBoard();
+    runSequence(robots, robotsPositionSequence);
+}
