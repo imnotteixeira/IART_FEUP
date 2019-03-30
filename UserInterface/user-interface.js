@@ -1,15 +1,23 @@
 let MOVEMENT_DURATION = 500; //in miliseconds - actual movement time
 let MOVEMENT_INTERVAL = 500;  //in miliseconds - interval between each movement
 
+let HOSTNAME = "http://localhost:8080";
+
 
 document.documentElement.style.setProperty("--robot-movement-speed", MOVEMENT_DURATION / 1000 + "s");
 
 const board = document.getElementById("board");
 const executedMovesDOM = document.getElementById("executedMovesNbr");
+const algorithmSelector = document.getElementById("algorithm-selector");
+const algorithmDuration = document.getElementById("algorithm-duration");
 let periodicRun;
 let prevStepFunc, nextStepFunc;
 
 const drawBoard = (walls, targets) => {
+
+    while (board.firstChild) {
+        board.removeChild(board.firstChild);
+    }
 
     const targetsMap = targets.reduce((map, target, i) => ({[target]: i, ...map}), {});
 
@@ -90,61 +98,10 @@ const runSequenceManually = (robots, positionSequence) => {
 /////////////////////////////////////////////////////////////////
 
 
-//simulated data from the API
-
-const boardWalls = [
-    1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, //15
-    1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, //31
-    0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, //47
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, //63
-    1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, //79
-    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, //95
-    0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, //111
-    1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, //127
-    0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, //143
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, //159
-    1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, //175
-    1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, //191
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, //207
-    0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, //223
-    1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, //239
-    1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, //255
-];
-
-const targetPositions = [30, -1, 172, 22];
-
-const robotsPositionSequence = [
-    [49, 60, 145, 253],
-    [49, 108, 145, 253],
-    [49, 108, 154, 253],
-    [49, 108, 138, 253],
-    [49, 108, 143, 253],
-    [49, 111, 143, 253],
-    [49, 127, 143, 253],
-    [49, 125, 143, 253],
-    [49, 125, 137, 253],
-    [49, 125, 137, 141],
-    [48, 125, 137, 141],
-    [48, 29, 137, 141],
-    [32, 29, 137, 141],
-    [37, 29, 137, 141],
-    [245, 29, 137, 141],
-    [245, 21, 137, 141],
-    [253, 21, 137, 141],
-    [253, 21, 140, 141],
-    [253, 21, 140, 29],
-    [253, 21, 140, 22],
-    [253, 21, 172, 22],
-    [29, 21, 172, 22],
-    [30, 21, 172, 22],
-];
 
 
-//run interface code
-
-drawBoard(boardWalls, targetPositions);
-
-const robots = createRobots(robotsPositionSequence[0]);
+let robotsPositionSequence = [];
+let robots = [];
 
 const STATES = {STOPPED: 0, AUTOMATIC: 1, MANUAL: 2};
 
@@ -188,3 +145,46 @@ document.getElementById("speed_slider").oninput = function() {
     resetBoard();
     runSequence(robots, robotsPositionSequence);
 }
+
+document.getElementById("file-input").onchange = function(){
+
+    let formData = new FormData();
+    formData.append('file', this.files[0]),
+    resetBoard();
+    fetch(HOSTNAME + "/board", {
+        method: 'POST',
+        body: formData,
+        })
+        .then((data) => data.json())
+        .then(data => {
+            drawBoard(data.walls, data.targets);
+            robots = createRobots(data.robots);       
+        });
+}
+
+const loadAlgorithms = () => {
+    fetch(HOSTNAME + "/listAlgorithms")
+    .then((data) => data.json())
+    .then(data => {
+        data.forEach(algorithmName => {
+            let option = document.createElement("option");
+            option.innerHTML = algorithmName;
+            option.value = algorithmName;
+            algorithmSelector.appendChild(option);
+        });
+    });
+}
+
+algorithmSelector.onchange = function(){
+    resetBoard();
+    fetch(HOSTNAME + "/runAlgorithm?algorithm=" + this.value)
+    .then((data) => data.json())
+    .then(data => {
+        robotsPositionSequence = data.solution;
+        algorithmDuration.innerHTML = data.time;
+    });
+}
+
+//////////////////////////////////////////////////
+
+loadAlgorithms();

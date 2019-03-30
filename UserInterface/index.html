@@ -11,23 +11,14 @@
     <div id="info">
         <h1>Labyrinth Robots</h1>
         <div>
-            <label>Select level: </label><select>
-                <option>Simplest Level</option>
-                <option>Level 7</option>
-                <option>Level 10</option>
-                <option>Level 18</option>
-                <option>Level 24</option>
-            </select>
+            <label>Select level: </label>
+            <input type="file" id="file-input"/>
         </div>
         <div>
-            <label>Select algorithm: </label><select>
-                <option>DFS</option>
-                <option>IDDFS</option>
-                <option>A*</option>
-                <option>A* with a non admissible heuristic</option>
-            </select>
+            <label>Select algorithm: </label>
+            <select id="algorithm-selector"></select>
         </div>
-        <h3>Algorithm ran in X ms</h3>
+        <h3>Algorithm ran in <span id="algorithm-duration"> - </span> ms</h3>
         <h2>Executed moves: <span id="executedMovesNbr">0</span></h2>
         <div id="run-controls">
             <div id="run-automatic-controls" style="display: none;">

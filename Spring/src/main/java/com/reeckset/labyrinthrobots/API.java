@@ -1,14 +1,9 @@
 package com.reeckset.labyrinthrobots;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +23,10 @@ public class API {
     }};
 
     @CrossOrigin(origins = "http://localhost:8000")
-    @RequestMapping(value = "/board", method = RequestMethod.GET)
-    public String getBoard(String filePath){
-        this.activeBoard = readLevel(filePath);
+    @RequestMapping(value = "/board", method = RequestMethod.POST)
+    public String getBoard(@RequestParam("file") MultipartFile file){
+
+        this.activeBoard = readLevel(file);
         return activeBoard.toJSON();
     }
 
@@ -66,25 +62,25 @@ public class API {
     }
 
     private static String getSolutionJSON(ArrayList<State> states){
-        String result = "[";
+        String result = "";
         for(int i = 0; i < states.size(); i++){
-            result += states.get(i).toJSON();
+            result = states.get(i).toJSON() + result;
             if(i < states.size() - 1){
-                result += ", ";
+                result = ", " + result;
             }
         }
-        return result + "]";
+        return "[" + result + "]";
     }
 
-    private static Board readLevel(String filePath) {
+    private static Board readLevel(MultipartFile file) {
 
-        File file = new File(filePath);
+
 
         byte[] walls = {};
         int[] targets = {}, robots = {};
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
             String st;
 
             st = br.readLine();
