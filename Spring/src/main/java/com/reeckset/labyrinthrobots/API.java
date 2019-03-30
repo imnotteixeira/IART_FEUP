@@ -23,7 +23,6 @@ public class API {
         put("Iterative Deepening DFS - optimized", (activeBoard) -> ((Board) activeBoard).iterativeDFS(true));
     }};
 
-    @CrossOrigin(origins = "http://localhost:8000")
     @RequestMapping(value = "/board", method = RequestMethod.POST)
     public String getBoard(@RequestParam("file") MultipartFile file){
 
@@ -31,7 +30,6 @@ public class API {
         return activeBoard.toJSON();
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
     @RequestMapping(value = "/runAlgorithm", method = RequestMethod.GET)
     public String runAlgorithm(String algorithm){
 
@@ -44,7 +42,6 @@ public class API {
         return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + duration + "}";
     }
 
-    @CrossOrigin(origins = "http://localhost:8000")
     @RequestMapping(value = "/listAlgorithms", method = RequestMethod.GET)
     public String listAlgorithms(){
 
