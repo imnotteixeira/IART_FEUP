@@ -1,9 +1,6 @@
 package com.reeckset.labyrinthrobots;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class CLI {
     private interface MenuItem {
@@ -31,20 +28,40 @@ public class CLI {
             }
 
 
-            Scanner in = new Scanner(System.in);
-            int option = in.nextInt();
 
-            if(option == 0) {
-                cli.returnMenu();
-            }
 
-            if(option > 0 && option <= items.length) { //valid option
-                if(items[option-1].getChildrenMenu() == null) {
-                    items[option-1].select();
-                } else {
-                    this.cli.advanceMenu(items[option-1].getChildrenMenu());
+
+            boolean validInput = false;
+            while (!validInput) {
+                validInput = true;
+
+
+                try {
+                    System.out.println("\nChoose an option [0-" + items.length+"]");
+
+                    Scanner in = new Scanner(System.in);
+                    int option = in.nextInt();
+
+                    if(option == 0) {
+                        cli.returnMenu();
+                    }
+
+                    if(option > 0 && option <= items.length) { //valid option
+                        if(items[option-1].getChildrenMenu() == null) {
+                            items[option-1].select();
+                        } else {
+                            this.cli.advanceMenu(items[option-1].getChildrenMenu());
+                        }
+                    }
+                } catch (InputMismatchException e) {
+                    validInput = false;
+                    System.out.print("Invalid Option. ");
                 }
+
+
             }
+
+
 
         }
     }
