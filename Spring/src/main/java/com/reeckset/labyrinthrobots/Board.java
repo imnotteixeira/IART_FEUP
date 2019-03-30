@@ -490,4 +490,58 @@ public class Board {
 
         throw new Exception("No Solution Found");
     }
+
+    /***************************************************************************/
+    /***                                BFS                                  ***/
+    /***************************************************************************/
+
+    public ArrayList<State> bfs_wrapper() {
+
+        long start = System.nanoTime();
+
+        try {
+            ArrayList<State> bfsSolution = bfs();
+            long elapsed = (System.nanoTime() - start) / 1000000;
+
+            System.out.println("Elapsed Time: " + elapsed + " ms");
+            printSolution(bfsSolution);
+            return bfsSolution;
+        } catch(Exception e) {
+            return new ArrayList<>();
+        }
+
+
+
+    }
+
+    private ArrayList<State> bfs() throws Exception{
+
+        Queue<State> pendingStates = new LinkedList<>();
+        pendingStates.add(initialState);
+
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        ArrayList<State> childrenStates;
+        while(!pendingStates.isEmpty()) {
+
+            State currState = pendingStates.poll();
+
+            if(visitedStatesToMoves.containsKey(currState)) {
+                continue;
+            }
+
+            if(isSolution(currState)) {
+                return getSolutionTrace(currState);
+            }
+
+            childrenStates = getChildrenStates(currState);
+
+            for (State child : childrenStates) {
+                pendingStates.add(child);
+            }
+
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+        }
+
+        throw new Exception("No Solution Found");
+    }
 }

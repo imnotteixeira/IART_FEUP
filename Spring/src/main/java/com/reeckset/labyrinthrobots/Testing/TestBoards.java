@@ -1,5 +1,7 @@
 package com.reeckset.labyrinthrobots.Testing;
 
+import com.reeckset.labyrinthrobots.Board;
+
 public class TestBoards {
 
     public static final byte[] NO_WALLS = {
@@ -20,6 +22,8 @@ public class TestBoards {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //239
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //255
     };
+    public static final int[] LEVEL_NO_WALLS_ROBOTS = {};
+    public static final int[] LEVEL_NO_WALLS_TARGETS = {17};
 
     public static final byte[] SIMPLE_PUZZLE_WALLS = {
             0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
@@ -39,6 +43,9 @@ public class TestBoards {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //239
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //255
     };
+
+    public static final int[] LEVEL_SIMPLE_ROBOTS = {};
+    public static final int[] LEVEL_SIMPLE_TARGETS = {0};
 
     public static final byte[] LEVEL_1_WALLS = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -131,6 +138,10 @@ public class TestBoards {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //255
     };
 
+    public static final int[] LEVEL_7_ROBOTS = {100, 137};
+    public static final int[] LEVEL_7_TARGETS = {83, 196};
+    public static final int LEVEL_7_OPTIMAL_STEPS = 7;
+
     public static final byte[] LEVEL_10_WALLS = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //15
             0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, //31
@@ -151,8 +162,8 @@ public class TestBoards {
     };
 
     public static final int[] LEVEL_10_ROBOTS = {177, 235};
-
     public static final int[] LEVEL_10_TARGETS = {157, -1};
+    public static final int LEVEL_10_OPTIMAL_STEPS = 12;
 
     public static final byte[] LEVEL_18_WALLS = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //15
@@ -173,6 +184,10 @@ public class TestBoards {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //255
     };
 
+    public static final int[] LEVEL_18_ROBOTS = {150, 153, 93};
+    public static final int[] LEVEL_18_TARGETS = {73, 85, -1};
+    public static final int LEVEL_18_OPTIMAL_STEPS = 9;
+
     public static final byte[] LEVEL_24_WALLS = {
             1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, //15
             1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, //31
@@ -191,5 +206,20 @@ public class TestBoards {
             1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, //239
             1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, //255
     };
+
+    public static final int[] LEVEL_24_ROBOTS = {49, 60, 145, 253};
+    public static final int[] LEVEL_24_TARGETS = {30, -1, 172, 22};
+    public static final int LEVEL_24_OPTIMAL_STEPS = 22;
+
+
+    public static Board LEVEL_NO_WALLS = new Board(NO_WALLS, LEVEL_NO_WALLS_TARGETS, LEVEL_NO_WALLS_ROBOTS);
+    public static Board LEVEL_SIMPLE = new Board(NO_WALLS, LEVEL_NO_WALLS_TARGETS, LEVEL_NO_WALLS_ROBOTS);
+    public static Board LEVEL_1 = new Board(LEVEL_1_WALLS, LEVEL_1_TARGETS, LEVEL_1_ROBOTS);
+    public static Board LEVEL_2 = new Board(LEVEL_2_WALLS, LEVEL_2_TARGETS, LEVEL_2_ROBOTS);
+    public static Board LEVEL_3 = new Board(LEVEL_3_WALLS, LEVEL_3_TARGETS, LEVEL_3_ROBOTS);
+    public static Board LEVEL_7 = new Board(LEVEL_7_WALLS, LEVEL_7_TARGETS, LEVEL_7_ROBOTS);
+    public static Board LEVEL_10 = new Board(LEVEL_10_WALLS, LEVEL_10_TARGETS, LEVEL_10_ROBOTS);
+    public static Board LEVEL_18 = new Board(LEVEL_18_WALLS, LEVEL_18_TARGETS, LEVEL_18_ROBOTS);
+    public static Board LEVEL_24 = new Board(LEVEL_24_WALLS, LEVEL_24_TARGETS, LEVEL_24_ROBOTS);
 
 }

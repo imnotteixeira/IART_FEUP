@@ -1,6 +1,5 @@
 package com.reeckset.labyrinthrobots.Testing;
 
-import com.reeckset.labyrinthrobots.Board;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,62 +7,34 @@ import static org.junit.Assert.assertEquals;
 public class IDDFS {
 
     @Test
-    public void testSimplePuzzle(){
-
-        int[] robots = {0};
-
-        int[] targets = {17};
-
-        Board b = new Board(TestBoards.SIMPLE_PUZZLE_WALLS, targets, robots);
-
-        assertEquals(3, b.iterativeDFS().size());
+    public void testLevel1(){
+        assertEquals(TestBoards.LEVEL_1_OPTIMAL_STEPS + 1, TestBoards.LEVEL_1.iterativeDFS().size());
     }
 
-    /*@Test
-    public void testSimplePuzzleInUnsolvablePosition(){
+    @Test
+    public void testLevel2(){
+        assertEquals(TestBoards.LEVEL_2_OPTIMAL_STEPS + 1, TestBoards.LEVEL_2.iterativeDFS().size());
+    }
 
-        int[] robots = {0};
-
-        int[] targets = {18};
-
-        Board b = new Board(TestBoards.SIMPLE_PUZZLE_WALLS, targets, robots);
-
-        assertEquals(0, b.iterativeDFS().size());
-    }*/
+    @Test
+    public void testLevel3(){
+        assertEquals(TestBoards.LEVEL_3_OPTIMAL_STEPS + 1, TestBoards.LEVEL_3.iterativeDFS().size());
+    }
 
     @Test
     public void testLevel7(){
-
-        int[] robots = {100, 137};
-
-        int[] targets = {83, 196};
-
-        Board b = new Board(TestBoards.LEVEL_7_WALLS, targets, robots);
-
-        assertEquals(8, b.iterativeDFS().size());
+        assertEquals(TestBoards.LEVEL_7_OPTIMAL_STEPS + 1, TestBoards.LEVEL_7.iterativeDFS().size());
     }
 
     @Test
     public void testLevel10(){
-
-        int[] robots = {177, 235};
-
-        int[] targets = {157, -1};
-
-        Board b = new Board(TestBoards.LEVEL_10_WALLS, targets, robots);
-
-        assertEquals(13, b.iterativeDFS().size());
+        long start = System.nanoTime();
+        assertEquals(TestBoards.LEVEL_10_OPTIMAL_STEPS + 1, TestBoards.LEVEL_10.iterativeDFS().size());
+        System.out.println(System.nanoTime() - start);
     }
 
     @Test
     public void testLevel18(){
-
-        int[] robots = {150, 153, 93};
-
-        int[] targets = {73, 85, -1};
-
-        Board b = new Board(TestBoards.LEVEL_18_WALLS, targets, robots);
-
-        assertEquals(10, b.iterativeDFS().size());
+        assertEquals(TestBoards.LEVEL_18_OPTIMAL_STEPS + 1, TestBoards.LEVEL_18.iterativeDFS().size());
     }
 }
