@@ -25,7 +25,6 @@ public class CLI {
         }
 
         public void show() {
-            cli.advanceMenu(this);
             System.out.println("> 0 - Back");
             for (int i = 0; i < items.length; i++) {
                 System.out.println("> "+ (i + 1) + " - " + items[i].getLabel());
@@ -135,7 +134,7 @@ public class CLI {
 
     public void init() {
         while(!menuStack.empty()) {
-            this.menuStack.pop().show();
+            this.menuStack.peek().show();
         }
 
     }
