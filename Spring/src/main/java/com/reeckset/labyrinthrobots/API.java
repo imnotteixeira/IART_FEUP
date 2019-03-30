@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 @RestController
@@ -34,13 +35,20 @@ public class API {
     @RequestMapping(value = "/runAlgorithm", method = RequestMethod.GET)
     public String runAlgorithm(String algorithm){
 
+        ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
         long start = System.currentTimeMillis();
 
-        ArrayList<State> solution = (ArrayList<State>) algorithmToFunction.get(algorithm).apply(activeBoard);
-
-        long duration = System.currentTimeMillis() - start;
-
-        return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + duration + "}";
+        Future<Object> future = executor.submit(() -> algorithmToFunction.get(algorithm).apply(activeBoard));
+        try {
+            ArrayList<State> solution = (ArrayList<State>) future.get(15, TimeUnit.SECONDS);
+            long duration = System.currentTimeMillis() - start;
+            executor.shutdown();
+            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + duration + "}";
+        } catch (Exception e) {
+            executor.shutdown(); // may or may not desire this
+            return "{}";
+        }
     }
 
     @RequestMapping(value = "/listAlgorithms", method = RequestMethod.GET)

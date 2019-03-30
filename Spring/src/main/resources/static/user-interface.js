@@ -3,6 +3,8 @@ let MOVEMENT_INTERVAL = 500;  //in miliseconds - interval between each movement
 
 let HOSTNAME = "http://localhost:8080";
 
+const ERROR_MSG = "TIMEOUT REACHED";
+
 
 document.documentElement.style.setProperty("--robot-movement-speed", MOVEMENT_DURATION / 1000 + "s");
 
@@ -118,6 +120,9 @@ const resetBoard = () => {
     document.getElementById("run-automatic").classList.remove("selected");
     document.getElementById("run-manually").classList.remove("selected");
 
+    document.getElementById("loading-indicator").innerHTML = "Running algorithm...";
+    algorithmDuration.innerHTML = "";
+
     let resetNotifier = document.createElement("div");
     resetNotifier.classList.add("reset-notifier");
     document.body.appendChild(resetNotifier);
@@ -181,12 +186,21 @@ const calculateAlgorithm = () => {
     if(!fileInput.files[0]) return;
     resetBoard();
     board.style.visibility = "hidden";
+    document.getElementById("run-automatic").disabled = true;
+    document.getElementById("run-manually").disabled = true;
     fetch(HOSTNAME + "/runAlgorithm?algorithm=" + algorithmSelector.value)
     .then((data) => data.json())
     .then(data => {
-        robotsPositionSequence = data.solution;
-        algorithmDuration.innerHTML = data.time;
-        board.style.visibility = "visible";
+        if(data.solution){
+            robotsPositionSequence = data.solution;
+            algorithmDuration.innerHTML = "Ran algorithm in " + data.time + "ms";
+            board.style.visibility = "visible";
+            document.getElementById("run-automatic").disabled = false;
+            document.getElementById("run-manually").disabled = false;
+        }else{
+            algorithmDuration.innerHTML = "";
+            document.getElementById("loading-indicator").innerHTML = ERROR_MSG;
+        }
     });
 }
 
