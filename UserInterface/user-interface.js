@@ -10,6 +10,7 @@ const board = document.getElementById("board");
 const executedMovesDOM = document.getElementById("executedMovesNbr");
 const algorithmSelector = document.getElementById("algorithm-selector");
 const algorithmDuration = document.getElementById("algorithm-duration");
+const fileInput = document.getElementById("file-input");
 let periodicRun;
 let prevStepFunc, nextStepFunc;
 
@@ -146,8 +147,8 @@ document.getElementById("speed_slider").oninput = function() {
     runSequence(robots, robotsPositionSequence);
 }
 
-document.getElementById("file-input").onchange = function(){
-
+fileInput.onchange = function(){
+    if(!fileInput.files[0]) return;
     let formData = new FormData();
     formData.append('file', this.files[0]),
     resetBoard();
@@ -158,7 +159,8 @@ document.getElementById("file-input").onchange = function(){
         .then((data) => data.json())
         .then(data => {
             drawBoard(data.walls, data.targets);
-            robots = createRobots(data.robots);       
+            robots = createRobots(data.robots);
+            calculateAlgorithm();      
         });
 }
 
@@ -175,15 +177,21 @@ const loadAlgorithms = () => {
     });
 }
 
-algorithmSelector.onchange = function(){
+const calculateAlgorithm = () => {
+    if(!fileInput.files[0]) return;
     resetBoard();
-    fetch(HOSTNAME + "/runAlgorithm?algorithm=" + this.value)
+    board.style.visibility = "hidden";
+    fetch(HOSTNAME + "/runAlgorithm?algorithm=" + algorithmSelector.value)
     .then((data) => data.json())
     .then(data => {
         robotsPositionSequence = data.solution;
         algorithmDuration.innerHTML = data.time;
+        board.style.visibility = "visible";
     });
 }
+
+algorithmSelector.onchange = () => calculateAlgorithm();
+
 
 //////////////////////////////////////////////////
 

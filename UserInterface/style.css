@@ -186,3 +186,18 @@ select{
     background-color: white;
     transition: opacity 0.6s ease-out;
 }
+
+#loading-indicator {
+    width: 50vh;
+    height: 50vh;
+    position: absolute;
+    top: 40vh;
+    left: 50%;
+    transform: translate(-50%,0);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 2em;
+    border: 1px white solid;
+}

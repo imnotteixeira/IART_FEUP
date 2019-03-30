@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -14,12 +15,12 @@ public class API {
 
     private Board activeBoard;
 
-    static final Map<String, Function> algorithmToFunction = new HashMap<String, Function>() {{
+    static final Map<String, Function> algorithmToFunction = new LinkedHashMap<String, Function>() {{
+        put("AStar", (activeBoard) -> ((Board) activeBoard).AStar());
+        put("AStar with non admissable heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
         put("DFS", (activeBoard) -> ((Board) activeBoard).dfs_wrapper());
         put("Iterative Deepening DFS", (activeBoard) -> ((Board) activeBoard).iterativeDFS());
         put("Iterative Deepening DFS - optimized", (activeBoard) -> ((Board) activeBoard).iterativeDFS(true));
-        put("AStar", (activeBoard) -> ((Board) activeBoard).AStar());
-        put("AStar with non admissable heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
     }};
 
     @CrossOrigin(origins = "http://localhost:8000")
