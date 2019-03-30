@@ -83,14 +83,34 @@ public class Board {
     public static void printSolution(ArrayList<State> states) {
 
         System.out.println("Found solution with " + (states.size() - 1) + " moves");
-        
-        for (int i = states.size() - 1; i >= 0 ; i--) {
+
+        State prevState = states.get(states.size()-1);
+
+
+
+        for (int i = states.size() - 2; i >= 0 ; i--) {
             int[] robots = states.get(i).robots;
-            for (int j = 0; j < robots.length; j++) {
-                System.out.println("::  [Robot " + j + "] Position: " + robots[j]+ "  ::");
+
+            printRobotMovement(prevState, states.get(i));
+            prevState = states.get(i);
+        }
+    }
+
+    private static void printRobotMovement(State prev, State curr) {
+        for (int i = 0; i < prev.robots.length; i++) {
+            if(prev.robots[i] != curr.robots[i]) {
+                String out = "Robot [" + i + "] moves from position " + getHumanReadablePosition(prev.robots[i])
+                        + " to " + getHumanReadablePosition(curr.robots[i]);
+                System.out.println(out);
+                return;
             }
         }
+    }
 
+    private static String getHumanReadablePosition(int pos) {
+        int x = pos % BOARD_SIZE;
+        int y = pos / BOARD_SIZE;
+        return "(" + x + ", " + y + ")";
     }
 
     private boolean isSolution(State state) {
