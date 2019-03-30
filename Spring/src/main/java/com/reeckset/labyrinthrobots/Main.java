@@ -1,11 +1,25 @@
 package com.reeckset.labyrinthrobots;
 
-import com.reeckset.labyrinthrobots.Testing.TestBoards;
+
+import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class Main {
 
     public static void main(String[] args){
-        Board b = new Board(TestBoards.LEVEL_10_WALLS, TestBoards.LEVEL_10_TARGETS, TestBoards.LEVEL_10_ROBOTS);
+        API api = new API();
+        api.loadLevel(new File("lvl_18.txt"));
+
+
+        int timeout = 15;
+        try {
+            AlgorithmSolution exec = api.execAlgorithm("AStar", timeout);
+            System.out.println("Time: " + exec.execTime + "ms");
+            Board.printSolution(exec.solution);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            System.out.println("Could not solve the given problem in the requested timeout (" + timeout + "s)");
+        }
     }
 
 }

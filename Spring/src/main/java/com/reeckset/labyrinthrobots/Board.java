@@ -80,15 +80,17 @@ public class Board {
         return result;
     }
 
-    public void printSolution(ArrayList<State> states) {
+    public static void printSolution(ArrayList<State> states) {
+
+        System.out.println("Found solution with " + (states.size() - 1) + " moves");
+        
         for (int i = states.size() - 1; i >= 0 ; i--) {
             int[] robots = states.get(i).robots;
             for (int j = 0; j < robots.length; j++) {
-                System.out.println("  ::  [Robot " + j + "] Position: " + robots[j]+ "  ::  ");
+                System.out.println("::  [Robot " + j + "] Position: " + robots[j]+ "  ::");
             }
-            System.out.println("\n------\n");
         }
-        System.out.println("Found solution with " + (states.size() - 1) + " moves");
+
     }
 
     private boolean isSolution(State state) {
@@ -347,7 +349,6 @@ public class Board {
                 ArrayList<State> iddfsSolution = iddfs(i, useCuts);
                 long elapsed = (System.nanoTime() - start) / 1000000;
 
-                printSolution(iddfsSolution);
                 System.out.println("Elapsed Time: " + elapsed + " ms");
                 return iddfsSolution;
             } catch(Exception e) {
@@ -450,7 +451,6 @@ public class Board {
             long elapsed = (System.nanoTime() - start) / 1000000;
 
             System.out.println("Elapsed Time: " + elapsed + " ms");
-            printSolution(dfsSolution);
             return dfsSolution;
         } catch(Exception e) {
             return new ArrayList<>();
@@ -504,7 +504,6 @@ public class Board {
             long elapsed = (System.nanoTime() - start) / 1000000;
 
             System.out.println("Elapsed Time: " + elapsed + " ms");
-            printSolution(bfsSolution);
             return bfsSolution;
         } catch(Exception e) {
             return new ArrayList<>();

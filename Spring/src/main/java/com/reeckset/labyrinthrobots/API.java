@@ -32,23 +32,35 @@ public class API {
         return activeBoard.toJSON();
     }
 
-    @RequestMapping(value = "/runAlgorithm", method = RequestMethod.GET)
-    public String runAlgorithm(String algorithm){
-
+    public AlgorithmSolution execAlgorithm(String algorithm, int timeout) throws InterruptedException, ExecutionException, TimeoutException {
         ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         long start = System.currentTimeMillis();
 
         Future<Object> future = executor.submit(() -> algorithmToFunction.get(algorithm).apply(activeBoard));
+
         try {
-            ArrayList<State> solution = (ArrayList<State>) future.get(15, TimeUnit.SECONDS);
+            ArrayList<State> solution = (ArrayList<State>) future.get(timeout, TimeUnit.SECONDS);
             long duration = System.currentTimeMillis() - start;
             executor.shutdown();
-            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + duration + "}";
+            return new AlgorithmSolution(duration, solution);
         } catch (Exception e) {
             executor.shutdown(); // may or may not desire this
+            throw(e);
+        }
+    }
+
+    @RequestMapping(value = "/runAlgorithm", method = RequestMethod.GET)
+    public String runAlgorithm(String algorithm){
+
+        try{
+            AlgorithmSolution sol = execAlgorithm(algorithm, 15);
+            ArrayList<State> solution = sol.solution;
+            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + sol.execTime + "}";
+        } catch (Exception e) {
             return "{}";
         }
+
     }
 
     @RequestMapping(value = "/listAlgorithms", method = RequestMethod.GET)
@@ -122,5 +134,50 @@ public class API {
         }
 
         return new Board(walls, targets, robots);
+    }
+
+    public void loadLevel(File file) {
+
+
+
+        byte[] walls = {};
+        int[] targets = {}, robots = {};
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String st;
+
+            st = br.readLine();
+
+            String[] wallPositions = st.split(",");
+            walls = new byte[wallPositions.length];
+
+            for (int i = 0; i < wallPositions.length; i++) {
+                walls[i] = Byte.parseByte(wallPositions[i]);
+            }
+
+            st = br.readLine();
+
+            String[] robotPositions = st.split(",");
+            robots = new int[robotPositions.length];
+
+            for (int i = 0; i < robotPositions.length; i++) {
+                robots[i] = Integer.parseInt(robotPositions[i]);
+            }
+
+            st = br.readLine();
+
+            String[] targetPositions = st.split(",");
+            targets = new int[targetPositions.length];
+
+            for (int i = 0; i < targetPositions.length; i++) {
+                targets[i] = Integer.parseInt(targetPositions[i]);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.activeBoard = new Board(walls, targets, robots);
     }
 }
