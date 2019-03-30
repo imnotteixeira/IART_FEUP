@@ -14,11 +14,11 @@ import java.util.function.Function;
 @RestController
 public class API {
 
-    private Board activeBoard;
+    private Board activeBoard = null;
 
     static final Map<String, Function> algorithmToFunction = new LinkedHashMap<String, Function>() {{
         put("AStar", (activeBoard) -> ((Board) activeBoard).AStar());
-        put("AStar with non admissable heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
+        put("AStar with non admissible heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
         put("BFS", (activeBoard) -> ((Board) activeBoard).bfs_wrapper());
         put("DFS", (activeBoard) -> ((Board) activeBoard).dfs_wrapper());
         put("Iterative Deepening DFS", (activeBoard) -> ((Board) activeBoard).iterativeDFS());
@@ -179,5 +179,9 @@ public class API {
         }
 
         this.activeBoard = new Board(walls, targets, robots);
+    }
+
+    public boolean isBoardLoaded() {
+        return this.activeBoard != null;
     }
 }
