@@ -466,6 +466,8 @@ public class Board {
 
             State currState = pQueue.poll();
 
+            result.incrementVisitedNodes();
+
             if(visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState)){
                 continue;
             }
