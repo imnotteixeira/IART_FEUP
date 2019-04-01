@@ -449,7 +449,9 @@ public class Board {
     /***                           GREEDY                             ***/
     /********************************************************************/
 
-    public ArrayList<State> greedy(boolean useStrict){
+    public AlgorithmSolution greedy(boolean useStrict){
+
+        AlgorithmSolution result = new AlgorithmSolution();
 
         Queue<State> pQueue;
         if(useStrict){
@@ -469,7 +471,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return getSolutionTrace(currState);
+                return result.setSolution(currState);
             }
 
             ArrayList<State> childrenStates = getChildrenStates(currState);
@@ -481,7 +483,7 @@ public class Board {
             visitedStatesToMoves.put(currState, currState.currentMoveCount);
         }
 
-        return new ArrayList<State>();
+        return null;
     }
 
 
@@ -561,7 +563,7 @@ public class Board {
 
             result.incrementVisitedNodes();
 
-            if(visitedStatesToMoves.containsKey(currState)) {
+            if(visitedStatesToMoves.contains(currState)) {
                 continue;
             }
 
