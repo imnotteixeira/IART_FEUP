@@ -21,8 +21,11 @@
 
                 output.value += "Puzzle Name,"
                 for(let i in algorithmNames){
-                    if(i == 3) continue;
-                    output.value += algorithmNames[i] + " (t)," + algorithmNames[i] + " (n)" + (i < algorithmNames.length - 1 ? "," : "");
+                    //if(i == 3) continue;
+                    output.value += algorithmNames[i] + " (t)," 
+                                + algorithmNames[i] + " (nodes),"
+                                + algorithmNames[i] + " (moves)"
+                                + (i < algorithmNames.length - 1 ? "," : "");
                 }
                 filesInput.onchange = async function () {
                     for(let file of this.files){
@@ -48,11 +51,11 @@
 
         async function resquestAlgorithms(algorithmNames){
             for(let i in algorithmNames){
-                if(i == 3) continue;
+                //if(i == 3) continue;
                 console.log("running " + algorithmNames[i]);
                 let a = await fetch(HOSTNAME + "/runAlgorithm?algorithm=" + algorithmNames[i])
                 result = await a.json();
-                output.value += result.time + "," + result.nodesVisited + (i < algorithmNames.length - 1 ? "," : "");
+                output.value += result.time + "," + result.nMoves + "," + result.nodesVisited + (i < algorithmNames.length - 1 ? "," : "");
             }
         }
 

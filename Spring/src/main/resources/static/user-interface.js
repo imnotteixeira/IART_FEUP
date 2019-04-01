@@ -191,7 +191,7 @@ const calculateAlgorithm = () => {
     fetch(HOSTNAME + "/runAlgorithm?algorithm=" + algorithmSelector.value)
     .then((data) => data.json())
     .then(data => {
-        if(data.solution){
+        if(data.solution && data.nMoves < 50){
             robotsPositionSequence = data.solution;
             algorithmDuration.innerHTML = "Ran algorithm in " + data.time + "ms, passed through " + data.nodesVisited + " nodes";
             board.style.visibility = "visible";
@@ -199,7 +199,12 @@ const calculateAlgorithm = () => {
             document.getElementById("run-manually").disabled = false;
         }else{
             algorithmDuration.innerHTML = "";
-            document.getElementById("loading-indicator").innerHTML = ERROR_MSG;
+            if(data.nMoves >= 50){
+                algorithmDuration.innerHTML = "Ran algorithm in " + data.time + "ms, passed through " + data.nodesVisited + " nodes";
+                document.getElementById("loading-indicator").innerHTML = "Solution too big to show (" + data.nMoves + " steps)";
+            }else{
+                document.getElementById("loading-indicator").innerHTML = ERROR_MSG;
+            }
         }
     });
 }

@@ -53,11 +53,11 @@ public class API {
     public String runAlgorithm(String algorithm){
 
         try{
-            AlgorithmSolution sol = execAlgorithm(algorithm, 15);
+            AlgorithmSolution sol = execAlgorithm(algorithm, 60);
             ArrayList<State> solution = sol.solution;
-            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + sol.execTime + ", \"nodesVisited\":" + sol.nVisitedNodes + "}";
+            return "{\"solution\":" + (solution.size() > 50 ? "[]" : getSolutionJSON(solution)) + ", \"time\":" + sol.execTime + ", \"nodesVisited\":" + sol.nVisitedNodes + ",\"nMoves\":" + (solution.size() - 1) + "}";
         } catch (Exception e) {
-            return "{\"solution\":[], \"time\":\"-\", \"nodesVisited\":\"-\"}";
+            return "{\"solution\":[], \"time\":\"-\", \"nodesVisited\":\"-\",\"nMoves\":\"-\"}";
         }
 
     }
