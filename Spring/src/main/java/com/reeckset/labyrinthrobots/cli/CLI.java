@@ -64,6 +64,50 @@ public class CLI {
             }
         };
 
+        MenuItem Greedy = new MenuItem(this) {
+            @Override
+            public String getLabel() {
+                return "Greedy Algorithm";
+            }
+
+            @Override
+            public void select() {
+                if(!cli.api.isBoardLoaded()) {
+                    System.out.println("No Board loaded, please select a level first!");
+                    return;
+                }
+
+                cli.execAlgorithm("Greedy Algorithm");
+            }
+
+            @Override
+            public Menu getChildrenMenu() {
+                return null;
+            }
+        };
+
+        MenuItem Greedy_Non_Admissible = new MenuItem(this) {
+            @Override
+            public String getLabel() {
+                return "Greedy Algorithm with non admissible heuristic";
+            }
+
+            @Override
+            public void select() {
+                if(!cli.api.isBoardLoaded()) {
+                    System.out.println("No Board loaded, please select a level first!");
+                    return;
+                }
+
+                cli.execAlgorithm("Greedy Algorithm with non admissible heuristic");
+            }
+
+            @Override
+            public Menu getChildrenMenu() {
+                return null;
+            }
+        };
+
         MenuItem DFS = new MenuItem(this) {
             @Override
             public String getLabel() {
@@ -155,7 +199,7 @@ public class CLI {
 
 
         Menu algorithmsMenu = new Menu(new MenuItem[]{
-                DFS, BFS, AStar, AStar_Non_Admissible, IDDFS, IDDFS_Optimized
+                DFS, BFS, AStar, AStar_Non_Admissible, Greedy, Greedy_Non_Admissible, IDDFS, IDDFS_Optimized
         }, this);
 
         MenuItem loadLevel = new MenuItem(this) {

@@ -446,6 +446,46 @@ public class Board {
 
 
     /********************************************************************/
+    /***                           GREEDY                             ***/
+    /********************************************************************/
+
+    public ArrayList<State> greedy(boolean useStrict){
+
+        Queue<State> pQueue;
+        if(useStrict){
+            pQueue = new PriorityQueue<State>(new StateComparatorGreedyStrict(this));
+        }else{
+            pQueue = new PriorityQueue<State>(new StateComparatorGreedy(this));
+        }
+        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        pQueue.add(this.initialState);
+
+        while(!pQueue.isEmpty()){
+
+            State currState = pQueue.poll();
+
+            if(visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState)){
+                continue;
+            }
+
+            if(isSolution(currState)) {
+                return getSolutionTrace(currState);
+            }
+
+            ArrayList<State> childrenStates = getChildrenStates(currState);
+
+            for (State child : childrenStates) {
+                pQueue.add(child);
+            }
+
+            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+        }
+
+        return new ArrayList<State>();
+    }
+
+
+    /********************************************************************/
     /***                            DFS                               ***/
     /********************************************************************/
 
@@ -513,7 +553,7 @@ public class Board {
         Queue<State> pendingStates = new LinkedList<>();
         pendingStates.add(initialState);
 
-        HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
+        HashSet<State> visitedStatesToMoves = new HashSet<>();
         ArrayList<State> childrenStates;
         while(!pendingStates.isEmpty()) {
 
@@ -532,10 +572,13 @@ public class Board {
             childrenStates = getChildrenStates(currState);
 
             for (State child : childrenStates) {
+                if(visitedStatesToMoves.contains(child)) {
+                    continue;
+                }
                 pendingStates.add(child);
             }
 
-            visitedStatesToMoves.put(currState, currState.currentMoveCount);
+            visitedStatesToMoves.add(currState);
         }
 
         throw new Exception("No Solution Found");

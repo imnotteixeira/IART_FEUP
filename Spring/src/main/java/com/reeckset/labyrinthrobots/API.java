@@ -21,6 +21,8 @@ public class API {
         put("AStar with non admissible heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
         put("BFS", (activeBoard) -> ((Board) activeBoard).bfs_wrapper());
         put("DFS", (activeBoard) -> ((Board) activeBoard).dfs_wrapper());
+        put("Greedy Algorithm", (activeBoard) -> ((Board) activeBoard).greedy(false));
+        put("Greedy Algorithm with non admissible heuristic", (activeBoard) -> ((Board) activeBoard).greedy(true));
         put("Iterative Deepening DFS", (activeBoard) -> ((Board) activeBoard).iterativeDFS());
         put("Iterative Deepening DFS - optimized", (activeBoard) -> ((Board) activeBoard).iterativeDFS(true));
     }};
