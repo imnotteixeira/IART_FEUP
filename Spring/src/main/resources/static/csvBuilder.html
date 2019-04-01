@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CSV Builder</title>
+</head>
+<body style="margin: 0">
+    <input type="file" id="files-input" multiple="multiple"/>
+    <textarea id="output" style="display: block; width: 100vw; height: Calc(100vh - 30px);"></textarea>
+    <script>
+
+        const filesInput = document.getElementById("files-input");
+        const output = document.getElementById("output");
+        let HOSTNAME = "http://localhost:8080";
+
+        fetch(HOSTNAME + "/listAlgorithms")
+            .then((data) => data.json())
+            .then(algorithmNames => {
+
+                output.value += "Puzzle Name,"
+                for(let i in algorithmNames){
+                    if(i == 3) continue;
+                    output.value += algorithmNames[i] + " (t)," + algorithmNames[i] + " (n)" + (i < algorithmNames.length - 1 ? "," : "");
+                }
+                filesInput.onchange = async function () {
+                    for(let file of this.files){
+                        const fileName = file.name;
+                        await loadFile(file);
+                        output.value += "\n" + fileName + ",";
+                        await resquestAlgorithms(algorithmNames);
+                    }
+                }
+        });
+
+        async function loadFile(file){
+
+            let formData = new FormData();
+            formData.append('file', file);
+            
+            return await (await fetch(HOSTNAME + "/board", {
+                method: 'POST',
+                body: formData,
+                })).json();
+        }
+        
+
+        async function resquestAlgorithms(algorithmNames){
+            for(let i in algorithmNames){
+                if(i == 3) continue;
+                console.log("running " + algorithmNames[i]);
+                let a = await fetch(HOSTNAME + "/runAlgorithm?algorithm=" + algorithmNames[i])
+                result = await a.json();
+                output.value += result.time + "," + result.nodesVisited + (i < algorithmNames.length - 1 ? "," : "");
+            }
+        }
+
+    </script>
+</body>
+</html>

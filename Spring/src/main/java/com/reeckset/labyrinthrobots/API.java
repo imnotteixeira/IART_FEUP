@@ -57,7 +57,7 @@ public class API {
             ArrayList<State> solution = sol.solution;
             return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + sol.execTime + ", \"nodesVisited\":" + sol.nVisitedNodes + "}";
         } catch (Exception e) {
-            return "{}";
+            return "{\"solution\":[], \"time\":\"-\", \"nodesVisited\":\"-\"}";
         }
 
     }
