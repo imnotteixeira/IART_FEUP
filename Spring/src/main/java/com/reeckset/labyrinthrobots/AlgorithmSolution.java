@@ -8,6 +8,7 @@ public class AlgorithmSolution {
     public long execTime;
     public ArrayList<State> solution;
     public int nSteps;
+    public int nVisitedNodes = 0;
 
     public AlgorithmSolution() {
         this.startTime = System.currentTimeMillis();
@@ -34,6 +35,10 @@ public class AlgorithmSolution {
         solution.add(currState);
 
         return solution;
+    }
+
+    public void incrementVisitedNodes(){
+        this.nVisitedNodes++;
     }
 
 }

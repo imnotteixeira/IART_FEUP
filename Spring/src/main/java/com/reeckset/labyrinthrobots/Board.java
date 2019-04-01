@@ -351,7 +351,7 @@ public class Board {
 
         for (int i = INITIAL_IDDFS_MAX_DEPTH; i <= IDDFS_MAX_DEPTH; i++) {
             try {
-                return result.setSolution(iddfs(i, useCuts));
+                return iddfs(result, i, useCuts);
             } catch(Exception e) {
                 continue;
             }
@@ -361,7 +361,7 @@ public class Board {
 
     }
 
-    private State iddfs(int maxDepth, boolean useCuts) throws Exception{
+    private AlgorithmSolution iddfs(AlgorithmSolution result, int maxDepth, boolean useCuts) throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
         pendingStates.push(initialState);
@@ -372,6 +372,8 @@ public class Board {
 
             State currState = pendingStates.pop();
 
+            result.incrementVisitedNodes();
+
             if(useCuts && !isValidRamification(currState, maxDepth - currState.currentMoveCount)){
                 continue;
             }
@@ -381,7 +383,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return currState;
+                return result.setSolution(currState);
             }
 
             childrenStates = getChildrenStates(currState);
@@ -409,9 +411,9 @@ public class Board {
 
         Queue<State> pQueue;
         if(useStrict){
-            pQueue = new PriorityQueue<State>(new StateComparatorStrict(this));
+            pQueue = new PriorityQueue<>(new StateComparatorStrict(this));
         }else{
-            pQueue = new PriorityQueue<State>(new StateComparator(this));
+            pQueue = new PriorityQueue<>(new StateComparator(this));
         }
         HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
         pQueue.add(this.initialState);
@@ -419,6 +421,8 @@ public class Board {
         while(!pQueue.isEmpty()){
 
             State currState = pQueue.poll();
+
+            result.incrementVisitedNodes();
 
             if(visitedStatesToMoves.containsKey(currState) && currState.currentMoveCount >= visitedStatesToMoves.get(currState)){
                 continue;
@@ -450,13 +454,13 @@ public class Board {
         AlgorithmSolution result = new AlgorithmSolution();
 
         try {
-            return result.setSolution(dfs());
+            return dfs(result);
         } catch(Exception e) {
             return null;
         }
     }
 
-    private State dfs() throws Exception{
+    private AlgorithmSolution dfs(AlgorithmSolution result) throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
         pendingStates.push(initialState);
@@ -467,12 +471,14 @@ public class Board {
 
             State currState = pendingStates.pop();
 
+            result.incrementVisitedNodes();
+
             if(visitedStatesToMoves.containsKey(currState)) {
                 continue;
             }
 
             if(isSolution(currState)) {
-                return currState;
+                return result.setSolution(currState);
             }
 
             childrenStates = getChildrenStates(currState);
@@ -496,13 +502,13 @@ public class Board {
         AlgorithmSolution result = new AlgorithmSolution();
 
         try {
-            return result.setSolution(bfs());
+            return bfs(result);
         } catch(Exception e) {
             return null;
         }
     }
 
-    private State bfs() throws Exception{
+    private AlgorithmSolution bfs(AlgorithmSolution result) throws Exception{
 
         Queue<State> pendingStates = new LinkedList<>();
         pendingStates.add(initialState);
@@ -513,12 +519,14 @@ public class Board {
 
             State currState = pendingStates.poll();
 
+            result.incrementVisitedNodes();
+
             if(visitedStatesToMoves.containsKey(currState)) {
                 continue;
             }
 
             if(isSolution(currState)) {
-                return currState;
+                return result.setSolution(currState);
             }
 
             childrenStates = getChildrenStates(currState);
