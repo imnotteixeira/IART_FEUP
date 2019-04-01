@@ -35,15 +35,12 @@ public class API {
     public AlgorithmSolution execAlgorithm(String algorithm, int timeout) throws InterruptedException, ExecutionException, TimeoutException {
         ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-        long start = System.currentTimeMillis();
-
         Future<Object> future = executor.submit(() -> algorithmToFunction.get(algorithm).apply(activeBoard));
 
         try {
-            ArrayList<State> solution = (ArrayList<State>) future.get(timeout, TimeUnit.SECONDS);
-            long duration = System.currentTimeMillis() - start;
+            AlgorithmSolution solution = (AlgorithmSolution) future.get(timeout, TimeUnit.SECONDS);
             executor.shutdown();
-            return new AlgorithmSolution(duration, solution);
+            return solution;
         } catch (Exception e) {
             executor.shutdown(); // may or may not desire this
             throw(e);

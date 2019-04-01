@@ -125,22 +125,6 @@ public class Board {
         return true;
     }
 
-    private ArrayList<State> getSolutionTrace(State solutionState) {
-
-        ArrayList<State> solution = new ArrayList<State>();
-        State currState = solutionState;
-
-        do {
-            solution.add(currState);
-            currState = currState.parentState;
-
-        } while(currState.parentState != null);
-
-        solution.add(currState);
-
-        return solution;
-    }
-
     private ArrayList<State> getChildrenStates(State currState) {
 
         ArrayList<State> retStates = new ArrayList<State>();
@@ -357,30 +341,27 @@ public class Board {
     /***                          IDDFS                          ***/
     /***************************************************************/
 
-    public ArrayList<State> iterativeDFS() {
+    public AlgorithmSolution iterativeDFS() {
         return iterativeDFS(false);
     }
 
-    public ArrayList<State> iterativeDFS(boolean useCuts) {
+    public AlgorithmSolution iterativeDFS(boolean useCuts) {
 
-        long start = System.nanoTime();
+        AlgorithmSolution result = new AlgorithmSolution();
+
         for (int i = INITIAL_IDDFS_MAX_DEPTH; i <= IDDFS_MAX_DEPTH; i++) {
             try {
-                ArrayList<State> iddfsSolution = iddfs(i, useCuts);
-                long elapsed = (System.nanoTime() - start) / 1000000;
-
-                System.out.println("Elapsed Time: " + elapsed + " ms");
-                return iddfsSolution;
+                return result.setSolution(iddfs(i, useCuts));
             } catch(Exception e) {
                 continue;
             }
         }
 
-        return new ArrayList<>();
+        return null;
 
     }
 
-    private ArrayList<State> iddfs(int maxDepth, boolean useCuts) throws Exception{
+    private State iddfs(int maxDepth, boolean useCuts) throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
         pendingStates.push(initialState);
@@ -400,7 +381,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return getSolutionTrace(currState);
+                return currState;
             }
 
             childrenStates = getChildrenStates(currState);
@@ -420,9 +401,11 @@ public class Board {
     /***                         A STAR                               ***/
     /********************************************************************/
 
-    public ArrayList<State> AStar(){ return AStar(false); }
+    public AlgorithmSolution AStar(){ return AStar(false); }
 
-    public ArrayList<State> AStar(boolean useStrict){
+    public AlgorithmSolution AStar(boolean useStrict){
+
+        AlgorithmSolution result = new AlgorithmSolution();
 
         Queue<State> pQueue;
         if(useStrict){
@@ -442,7 +425,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return getSolutionTrace(currState);
+                return result.setSolution(currState);
             }
 
             ArrayList<State> childrenStates = getChildrenStates(currState);
@@ -454,7 +437,7 @@ public class Board {
             visitedStatesToMoves.put(currState, currState.currentMoveCount);
         }
 
-        return new ArrayList<State>();
+        return null;
     }
 
 
@@ -462,25 +445,18 @@ public class Board {
     /***                            DFS                               ***/
     /********************************************************************/
 
-    public ArrayList<State> dfs_wrapper() {
+    public AlgorithmSolution dfs_wrapper() {
 
-        long start = System.nanoTime();
+        AlgorithmSolution result = new AlgorithmSolution();
 
         try {
-            ArrayList<State> dfsSolution = dfs();
-            long elapsed = (System.nanoTime() - start) / 1000000;
-
-            System.out.println("Elapsed Time: " + elapsed + " ms");
-            return dfsSolution;
+            return result.setSolution(dfs());
         } catch(Exception e) {
-            return new ArrayList<>();
+            return null;
         }
-
-
-
     }
 
-    private ArrayList<State> dfs() throws Exception{
+    private State dfs() throws Exception{
 
         Stack<State> pendingStates = new Stack<>();
         pendingStates.push(initialState);
@@ -496,7 +472,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return getSolutionTrace(currState);
+                return currState;
             }
 
             childrenStates = getChildrenStates(currState);
@@ -515,25 +491,18 @@ public class Board {
     /***                                BFS                                  ***/
     /***************************************************************************/
 
-    public ArrayList<State> bfs_wrapper() {
+    public AlgorithmSolution bfs_wrapper() {
 
-        long start = System.nanoTime();
+        AlgorithmSolution result = new AlgorithmSolution();
 
         try {
-            ArrayList<State> bfsSolution = bfs();
-            long elapsed = (System.nanoTime() - start) / 1000000;
-
-            System.out.println("Elapsed Time: " + elapsed + " ms");
-            return bfsSolution;
+            return result.setSolution(bfs());
         } catch(Exception e) {
-            return new ArrayList<>();
+            return null;
         }
-
-
-
     }
 
-    private ArrayList<State> bfs() throws Exception{
+    private State bfs() throws Exception{
 
         Queue<State> pendingStates = new LinkedList<>();
         pendingStates.add(initialState);
@@ -549,7 +518,7 @@ public class Board {
             }
 
             if(isSolution(currState)) {
-                return getSolutionTrace(currState);
+                return currState;
             }
 
             childrenStates = getChildrenStates(currState);
