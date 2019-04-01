@@ -53,7 +53,7 @@ public class API {
         try{
             AlgorithmSolution sol = execAlgorithm(algorithm, 15);
             ArrayList<State> solution = sol.solution;
-            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + sol.execTime + "}";
+            return "{\"solution\":" + getSolutionJSON(solution) + ", \"time\":" + sol.execTime + ", \"nodesVisited\":" + sol.nVisitedNodes + "}";
         } catch (Exception e) {
             return "{}";
         }

@@ -193,7 +193,7 @@ const calculateAlgorithm = () => {
     .then(data => {
         if(data.solution){
             robotsPositionSequence = data.solution;
-            algorithmDuration.innerHTML = "Ran algorithm in " + data.time + "ms";
+            algorithmDuration.innerHTML = "Ran algorithm in " + data.time + "ms, passed through " + data.nodesVisited + " nodes";
             board.style.visibility = "visible";
             document.getElementById("run-automatic").disabled = false;
             document.getElementById("run-manually").disabled = false;

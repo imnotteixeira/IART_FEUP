@@ -228,6 +228,7 @@ public class CLI {
         try {
             AlgorithmSolution exec = api.execAlgorithm(algorithm, timeout);
             System.out.println("Time: " + exec.execTime + "ms");
+            System.out.println("Visited nodes: " + exec.nVisitedNodes);
             Board.printSolution(exec.solution);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             System.out.println("Could not solve the given problem in the requested timeout (" + timeout + "s)");
