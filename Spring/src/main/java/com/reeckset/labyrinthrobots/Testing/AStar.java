@@ -38,7 +38,7 @@ public class AStar {
     @Test
     public void testLevel10_strict(){
         long start = System.nanoTime();
-        assertEquals(TestBoards.LEVEL_10_OPTIMAL_STEPS + 1, TestBoards.LEVEL_10.AStar(true).nSteps);
+        assertEquals(TestBoards.LEVEL_10_OPTIMAL_STEPS + 1, TestBoards.LEVEL_10.AStar(Board.HEURISTICS.NON_ADMISSIBLE).nSteps);
         System.out.println(System.nanoTime() - start);
     }
 
@@ -54,6 +54,6 @@ public class AStar {
 
     @Test
     public void testLevel24_strict(){
-        assertEquals(TestBoards.LEVEL_24_OPTIMAL_STEPS + 1, TestBoards.LEVEL_24.AStar(true).nSteps);
+        assertEquals(TestBoards.LEVEL_24_OPTIMAL_STEPS + 1, TestBoards.LEVEL_24.AStar(Board.HEURISTICS.NON_ADMISSIBLE).nSteps);
     }
 }

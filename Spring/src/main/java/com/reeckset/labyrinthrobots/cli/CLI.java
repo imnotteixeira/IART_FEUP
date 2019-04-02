@@ -64,6 +64,28 @@ public class CLI {
             }
         };
 
+        MenuItem AStar_Non_Admissible_v2 = new MenuItem(this) {
+            @Override
+            public String getLabel() {
+                return "A* with non admissible heuristic v2";
+            }
+
+            @Override
+            public void select() {
+                if(!cli.api.isBoardLoaded()) {
+                    System.out.println("No Board loaded, please select a level first!");
+                    return;
+                }
+
+                cli.execAlgorithm("AStar with non admissible heuristic v2");
+            }
+
+            @Override
+            public Menu getChildrenMenu() {
+                return null;
+            }
+        };
+
         MenuItem Greedy = new MenuItem(this) {
             @Override
             public String getLabel() {
@@ -199,7 +221,7 @@ public class CLI {
 
 
         Menu algorithmsMenu = new Menu(new MenuItem[]{
-                DFS, BFS, AStar, AStar_Non_Admissible, Greedy, Greedy_Non_Admissible, IDDFS, IDDFS_Optimized
+                DFS, BFS, AStar, AStar_Non_Admissible, AStar_Non_Admissible_v2, Greedy, Greedy_Non_Admissible, IDDFS, IDDFS_Optimized
         }, this);
 
         MenuItem loadLevel = new MenuItem(this) {

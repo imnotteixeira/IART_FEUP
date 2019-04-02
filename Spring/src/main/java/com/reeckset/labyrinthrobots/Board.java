@@ -403,18 +403,26 @@ public class Board {
     /***                         A STAR                               ***/
     /********************************************************************/
 
-    public AlgorithmSolution AStar(){ return AStar(false); }
+    public static enum HEURISTICS {ADMISSIBLE, NON_ADMISSIBLE, NON_ADMISSIBLE_STRICT};
 
-    public AlgorithmSolution AStar(boolean useStrict){
+    public AlgorithmSolution AStar(){ return AStar(HEURISTICS.ADMISSIBLE); }
+
+    public AlgorithmSolution AStar(HEURISTICS heuristic){
 
         AlgorithmSolution result = new AlgorithmSolution();
 
-        Queue<State> pQueue;
-        if(useStrict){
-            pQueue = new PriorityQueue<>(new StateComparatorStrict(this));
-        }else{
-            pQueue = new PriorityQueue<>(new StateComparator(this));
+        Queue<State> pQueue = new PriorityQueue<>();
+        switch (heuristic) {
+            case ADMISSIBLE:
+                pQueue = new PriorityQueue<>(new StateComparatorAdmissible(this));
+                break;
+            case NON_ADMISSIBLE:
+                pQueue = new PriorityQueue<>(new StateComparatorNonAdmissible(this));
+                break;
+            case NON_ADMISSIBLE_STRICT:
+                pQueue = new PriorityQueue<>(new StateComparatorNonAdmissibleStrict(this));
         }
+
         HashMap<State, Integer> visitedStatesToMoves = new HashMap<>();
         pQueue.add(this.initialState);
 

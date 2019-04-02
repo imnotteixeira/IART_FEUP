@@ -18,7 +18,8 @@ public class API {
 
     static final Map<String, Function> algorithmToFunction = new LinkedHashMap<String, Function>() {{
         put("AStar", (activeBoard) -> ((Board) activeBoard).AStar());
-        put("AStar with non admissible heuristic", (activeBoard) -> ((Board) activeBoard).AStar(true));
+        put("AStar with non admissible heuristic", (activeBoard) -> ((Board) activeBoard).AStar(Board.HEURISTICS.NON_ADMISSIBLE));
+        put("AStar with non admissible heuristic v2", (activeBoard) -> ((Board) activeBoard).AStar(Board.HEURISTICS.NON_ADMISSIBLE_STRICT));
         put("BFS", (activeBoard) -> ((Board) activeBoard).bfs_wrapper());
         put("DFS", (activeBoard) -> ((Board) activeBoard).dfs_wrapper());
         put("Greedy Algorithm", (activeBoard) -> ((Board) activeBoard).greedy(false));

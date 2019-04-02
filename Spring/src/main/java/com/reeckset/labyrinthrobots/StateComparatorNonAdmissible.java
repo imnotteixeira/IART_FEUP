@@ -2,14 +2,15 @@ package com.reeckset.labyrinthrobots;
 
 import java.util.Comparator;
 
-public class StateComparatorStrict implements Comparator<State> {
+public class StateComparatorNonAdmissible implements Comparator<State> {
 
     private Board board;
 
-    public StateComparatorStrict(Board board){
+    public StateComparatorNonAdmissible(Board board){
         super();
         this.board = board;
     }
+
 
     @Override
     public int compare(State o1, State o2) {
@@ -20,7 +21,7 @@ public class StateComparatorStrict implements Comparator<State> {
 
         int total = 0;
         for(int i = 0; i < s.robots.length; i++) {
-            total += this.board.minMovesPerTargetStrict[i][s.robots[i]];
+            total += this.board.minMovesPerTarget[i][s.robots[i]];
         }
 
         return total + s.currentMoveCount;
