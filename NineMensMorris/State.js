@@ -10,21 +10,29 @@ const ACTIONS = Object.freeze({
 });
 
 const CELL_STATES = Object.freeze({ 
-    EMPTY: "-",
+    EMPTY: -1,
     PLAYER1: 0,
     PLAYER2: 1
 });
 
+const CELL_VIEWS = Object.freeze({
+    "-1": "◯",
+    "0": "⚪",
+    "1": "⚫"
+    
+})
+
 const BOARD_SIZE = 24;
 const MAX_PIECES_THRESHOLD = 9;
 const MIN_PIECES_THRESHOLD = 3;
+const DIRECTIONS = [-1, 1, -3, 3];
 
 class State {
 
     constructor(current_player){
         this.board = new Array(BOARD_SIZE).fill(CELL_STATES.EMPTY);
         this.active_player = current_player;
-        this.n_turns = new Array(2).fill(0);
+        this.n_turns = new Array(2).fill(5);
         this.n_pieces_in_board = new Array(2).fill(0);
 
         //Function this binding
@@ -37,12 +45,33 @@ class State {
         
     }
 
-    player1won(){
-        return this.n_pieces_in_board[0] < 3;
+    player1Won(){
+        return (this.n_pieces_in_board[CELL_STATES.PLAYER2] < 3 && getAction() != ACTIONS.PLACING) 
+        || this.getValidMoves(CELL_STATES.PLAYER2).length === 0;
     }
 
-    player2won(){
-        return this.n_pieces_in_board[1] < 3;
+    player2Won(){
+        return (this.n_pieces_in_board[CELL_STATES.PLAYER1] < 3 && getAction() != ACTIONS.PLACING)
+        || this.getAction(CELL_STATES.PLAYER1).length === 0;
+    }
+
+    getValidMoves(player){
+        //depending on the current action?
+        
+        let states = [];
+        for(let i = 0; i < this.board; i++){
+            DIRECTIONS.forEach(dir => {
+                let pos = (i+dir+24)%24;
+                if (this.board[pos] === CELL_STATES.EMPTY)
+                    states.push(movePiece(player, i, pos));
+            });
+        }
+
+        return states;
+    }
+
+    isGameOver(){
+        return player1won() || player2won();
     }
 
     getAction() {
@@ -127,6 +156,8 @@ class State {
         return val === this.active_player;
     }
 
+
+
     
 }
 
@@ -134,5 +165,6 @@ module.exports = {
     State, 
     PLAYER_TYPES,
     ACTIONS, 
-    CELL_STATES
+    CELL_STATES,
+    CELL_VIEWS
 }

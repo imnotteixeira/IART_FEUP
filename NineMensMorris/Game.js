@@ -1,6 +1,7 @@
 const PLAYER_TYPES = require('./State.js').PLAYER_TYPES;
-const HumanPlayer = require('./HumanPlayer.js');
-const AIPlayer = require('./AIPlayer.js');
+const CELL_VIEWS = require('./State.js').CELL_VIEWS;
+const HumanPlayer = require('./players/HumanPlayer.js');
+const AIPlayer = require('./players/AIPlayer.js');
 const State = require('./State.js').State;
 
 class Game {
@@ -21,6 +22,7 @@ class Game {
         while(!this.isGameOver()){
             await this.update();
             console.log(this.state);
+            this.printBoard();
         }
     }
 
@@ -51,8 +53,32 @@ class Game {
         this.state.active_player = (this.state.active_player + 1) % 2;
     }
 
-    
+    printBoard(){
+        const b = this.state.board;
 
+        console.log("\n",
+        `7   ${CELL_VIEWS[b[23]]} --------------------- ${CELL_VIEWS[b[2]]} --------------------- ${CELL_VIEWS[b[5]]}\n`,
+        `    |                       |                       |\n`,
+        `    |                       |                       |\n`,
+        `6   |       ${CELL_VIEWS[b[22]]} ------------- ${CELL_VIEWS[b[1]]} ------------- ${CELL_VIEWS[b[4]]}       |\n`,
+        `    |       |               |               |       |\n`,
+        `    |       |               |               |       |\n`,
+        `5   |       |       ${CELL_VIEWS[b[21]]} ----- ${CELL_VIEWS[b[0]]} ----- ${CELL_VIEWS[b[3]]}       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `4   ${CELL_VIEWS[b[20]]} ----- ${CELL_VIEWS[b[19]]} ----- ${CELL_VIEWS[b[18]]}               ${CELL_VIEWS[b[6]]} ----- ${CELL_VIEWS[b[7]]} ----- ${CELL_VIEWS[b[8]]}\n`,
+        `    |       |       |               |       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `3   |       |       ${CELL_VIEWS[b[15]]} ----- ${CELL_VIEWS[b[12]]} ----- ${CELL_VIEWS[b[9]]}       |       |\n`,
+        `    |       |               |               |       |\n`,
+        `    |       |               |               |       |\n`,
+        `2   |       ${CELL_VIEWS[b[16]]} ------------- ${CELL_VIEWS[b[13]]} ------------- ${CELL_VIEWS[b[10]]}       |\n`,
+        `    |                       |                       |\n`,
+        `    |                       |                       |\n`,
+        `1   ${CELL_VIEWS[b[17]]} --------------------- ${CELL_VIEWS[b[14]]} --------------------- ${CELL_VIEWS[b[11]]}\n`,
+        `                                         \n`,
+        `    A       B       C       D       E       F       G`);
+    }
 }
 
 module.exports = Game
