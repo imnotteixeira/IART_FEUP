@@ -24,3 +24,5 @@ hs_err_pid*
 
 #intellij data
 */.idea/*.xml
+
+*/node_modules/
