@@ -56,17 +56,56 @@ class State {
     }
 
     getValidMoves(player){
-        //depending on the current action?
-        
         let states = [];
-        for(let i = 0; i < this.board; i++){
-            DIRECTIONS.forEach(dir => {
-                let pos = (i+dir+24)%24;
-                if (this.board[pos] === CELL_STATES.EMPTY)
-                    states.push(movePiece(player, i, pos));
-            });
+        switch(this.getAction()){
+            case ACTIONS.PLACING:
+                states = this.getValidPlacings(player);
+                break;
+            case ACTIONS.MOVING:
+                states = this.getValidMovings(player);
+                break;
+            case ACTIONS.FLYING:
+                break;
         }
 
+        return states;
+    }
+
+    getValidMovings(player){
+        let states = [];
+        for(let i = 0; i < this.board.length; i++){
+            if (this.board[i] === player){
+                DIRECTIONS.forEach(dir => {
+                    let pos = (i+dir+24)%24;
+                    if (this.board[pos] === CELL_STATES.EMPTY && player.isValidMove(i, pos))
+                        states.push(this.movePiece(player, i, pos));
+                });
+            }
+        }
+        return states;
+    }
+
+    getValidPlacings(player){
+        let states = [];
+        for(let i = 0; i < this.board.length; i++){
+            if (this.board[i] === CELL_STATES.EMPTY ){
+                states.push(this.addPiece(player, i));
+            }
+        }
+        return states;
+    }
+
+    getValidFlyings(player){
+        let states = [];
+        for(let i = 0; i < this.board.length; i++){
+            if (this.board[i] === player){
+                for(let j = 0; j < this.board.length; j++){
+                    if (this.board[j] === CELL_STATES.EMPTY){
+                        states.push(this.movePiece(player, i, j));
+                    } 
+                }
+            }
+        }
         return states;
     }
 

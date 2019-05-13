@@ -9,10 +9,7 @@ class MinimaxAIPlayer extends AIPlayer {
 
     chooseNextMove(moves) {}
     
-    getNextMove(state){
-        let moves = this.getValidMoves(state);
-        return this.chooseNextMove(moves);
-    }    
+       
 }
 
 module.exports = AIPlayer;

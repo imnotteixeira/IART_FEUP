@@ -1,7 +1,7 @@
 const PLAYER_TYPES = require('./State.js').PLAYER_TYPES;
 const CELL_VIEWS = require('./State.js').CELL_VIEWS;
 const HumanPlayer = require('./players/HumanPlayer.js');
-const AIPlayer = require('./players/AIPlayer.js');
+const RandomAIPlayer = require('./players/RandomAIPlayer.js');
 const State = require('./State.js').State;
 
 class Game {
@@ -32,7 +32,7 @@ class Game {
     createPlayer(playerType, id) {
         switch(playerType){
             case PLAYER_TYPES.AI:
-                return new AIPlayer(id);
+                return new RandomAIPlayer(id);
             case PLAYER_TYPES.HUMAN:
                 return new HumanPlayer(id);    
         }

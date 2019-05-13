@@ -8,7 +8,8 @@ class Player {
         console.log("Player function not defined");
         return state;
     }
-
+    
+    //shoud it be here?
     isValidMove(idx1, idx2){
         switch((idx2 - idx1 + 24) % 24){
             case 23:
