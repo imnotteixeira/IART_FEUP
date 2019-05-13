@@ -82,9 +82,10 @@ class HumanPlayer extends Player {
     }
 
     move(state, idx1, idx2){
-        if(isValidMove(idx1, idx2)){
-            return state.addPiece(state, idx2).removePiece(idx1);
+        if(this.isValidMove(idx1, idx2) && state.board[idx2] === CELL_STATES.EMPTY){
+            return state.addPiece(this.id, idx2).removePiece(idx1);
         }
+        throw "Invalid move";
     }
 
     addPiece(state, coordinates){

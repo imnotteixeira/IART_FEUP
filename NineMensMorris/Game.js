@@ -21,7 +21,6 @@ class Game {
     async run(){
         while(!this.isGameOver()){
             await this.update();
-            console.log(this.state);
             this.printBoard();
         }
     }
@@ -40,6 +39,7 @@ class Game {
     }
 
     async update(){
+        console.log(" --- Player ", this.state.active_player, " ---");
         this.state = await this.getActivePlayer().play(this.state);
         this.state.n_turns[this.state.active_player]++;
         this.switchPlayer();
