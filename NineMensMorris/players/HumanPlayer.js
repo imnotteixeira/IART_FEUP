@@ -82,7 +82,7 @@ class HumanPlayer extends Player {
     }
 
     move(state, idx1, idx2){
-        if(this.isValidMove(idx1, idx2) && state.board[idx2] === CELL_STATES.EMPTY){
+        if(state.colinearPositions(idx1, idx2) && state.board[idx2] === CELL_STATES.EMPTY){
             return state.addPiece(this.id, idx2).removePiece(idx1);
         }
         throw "Invalid move";
