@@ -8,41 +8,52 @@ class MinimaxAIPlayer extends AIPlayer {
         this.depth = depth;
     }
 
-    async play(state){
-        return this.minimax(state, this.depth, this.id === 0);
+    chooseNextMove(moves) {
+        let best_value = this.id === 0 ? -Infinity : Infinity;
+        let best_move;
+        for(let move of moves){
+            const val = this.minimax(move, this.depth - 1, this.id === 0);
+            if(this.id === 0){
+                if(val > best_value){
+                    best_value = val;
+                    best_move = move;
+                }
+            }else{
+                if(val < best_value){
+                    best_value = val;
+                    best_move = move;
+                }
+            }
+        }
+
+        console.log(best_move.n_pieces_in_board[0], best_move.n_pieces_in_board[1], best_move.getMillsOfPlayer(0), best_move.getMillsOfPlayer(1));
+        console.log("ID: ", this.id, " - VAL: ", best_value);
+
+        return best_move;
     }
 
     minimax(state, depth, maximizing_player) {
-        if (depth == 0 || state.isGameOver()) {// or game over in position
-            return state;//static evaluation of position 
+        if (depth === 0 || state.isGameOver()) {// or game over in position
+            return (depth + 1) * this.evaluateState(state);
         }
-        const valid_moves = state.getValidMoves(this.id);
+        const valid_moves = state.getValidMoves(maximizing_player ? 0:1);
 
         if(maximizing_player) {
             let max_val = -Infinity;
 
             valid_moves.forEach(child_state => {
-                let generatedState = this.minimax(child_state, depth - 1, false);
-                let val = this.evaluateState(generatedState);
+                const val = this.minimax(child_state, depth - 1, false);
                 max_val = Math.max(max_val, val);
-                if(val > max_val){
-                    max_val = val;
-                    state = generatedState;
-                }
             });                
+            return max_val;
         } else {
             let min_val = Infinity;
             valid_moves.forEach(child_state => {
-                let generatedState = this.minimax(child_state, depth - 1, true)
-                let val = this.evaluateState(generatedState);
-                if(val < min_val){
-                    min_val = val;
-                    state = generatedState;
-                }
+                const val = this.minimax(child_state, depth - 1, true)
+                min_val = Math.min(min_val, val);
             });
+            return min_val;
         }
-
-        return state;
     }
       
     evaluateState(state){
@@ -50,13 +61,14 @@ class MinimaxAIPlayer extends AIPlayer {
             return Infinity;
         else if (state.playerLost(0))
             return -Infinity;
-        else return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) + (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1));
+        else {
+            /*console.log("ANALYSNG ---------------------------")
+            state.printBoard();
+            console.log(state.n_pieces_in_board[0], state.n_pieces_in_board[1], state.getMillsOfPlayer(0), state.getMillsOfPlayer(1));
+            console.log(" -------------------------------------")*/
+            return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) + (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1)) * 10;
+        }
     }
-    
-    getNextMove(state){
-        let moves = state.getValidMoves();
-        return this.chooseNextMove(moves);
-    }    
 }
 
 module.exports = MinimaxAIPlayer;

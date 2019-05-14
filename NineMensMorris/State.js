@@ -75,6 +75,17 @@ class State {
         return states;
     }
 
+    getValidPlacings(player){
+        let states = [];
+        for(let i = 0; i < this.board.length; i++){
+            if (this.board[i] === CELL_STATES.EMPTY ){
+                let new_state = this.addPiece(player, i);
+                states.push(...new_state.generateStatesFromFormedMills(i, player));
+            }
+        }
+        return states;
+    }
+
     getValidMovings(player){
         let states = [];
         for(let i = 0; i < this.board.length; i++){
@@ -91,23 +102,14 @@ class State {
         return states;
     }
 
-    getValidPlacings(player){
-        let states = [];
-        for(let i = 0; i < this.board.length; i++){
-            if (this.board[i] === CELL_STATES.EMPTY ){
-                states.push(this.addPiece(player, i));
-            }
-        }
-        return states;
-    }
-
     getValidFlyings(player){
         let states = [];
         for(let i = 0; i < this.board.length; i++){
             if (this.board[i] === player){
                 for(let j = 0; j < this.board.length; j++){
                     if (this.board[j] === CELL_STATES.EMPTY){
-                        states.push(this.movePiece(player, i, j));
+                        let new_state = this.movePiece(player, i, j);
+                        states.push(...new_state.generateStatesFromFormedMills(j, player));
                     } 
                 }
             }
@@ -165,7 +167,7 @@ class State {
         return this.removePiece(board_idx1).addPiece(player, board_idx2);
     }
 
-    getMillsFromCell(index) {
+    static getMillsFromCell(index) {
         let result = [];
 
         if(Math.floor(index/3) % 2 === 1){ //is in a corner
@@ -198,12 +200,12 @@ class State {
         return result;
     }
 
-    normalizeIndex(index){
+    static normalizeIndex(index){
         return (index + BOARD_SIZE) % BOARD_SIZE;
     }
 
     checkMills(board_idx){
-        const lines = this.getMillsFromCell(board_idx);
+        const lines = millsPerCell[board_idx];
         return this.checkMill(lines[0]) || this.checkMill(lines[1]);
     }
 
@@ -218,9 +220,9 @@ class State {
     colinearPositions(idx1, idx2){
         switch((idx2 - idx1 + 24) % 24){
             case 23:
-                return idx2 % 3 !== 0 && Math.floor(idx1/3)%2 === 0 ? true : false;
-            case 1:
                 return idx1 % 3 !== 0 && Math.floor(idx1/3)%2 === 0 ? true : false;
+            case 1:
+                return idx2 % 3 !== 0 && Math.floor(idx1/3)%2 === 0 ? true : false;
             case 21:
             case 3:
                 return true;
@@ -230,14 +232,14 @@ class State {
     }
 
     getMillsOfPlayer(player){
-        return this.getPossibleMillCoordinates().reduce(
+        return possibleMillCoords.reduce(
             (counter, possibleMillCoordinates) => 
-                possibleMillCoordinates.every(val => val === player) ? 
+                possibleMillCoordinates.every(val => this.board[val] === player) ? 
                 counter + 1 : counter
         , 0);
     }
 
-    getPossibleMillCoordinates(){
+    static getPossibleMillCoordinates(){
         let result = [];
         for(let i = 0; i < 24; i++){
             if(i % 6 === 0){
@@ -277,6 +279,9 @@ class State {
         `    A       B       C       D       E       F       G`);
     }
 }
+
+const millsPerCell = new Array(24).fill(0).map((v, i) => State.getMillsFromCell(i));
+const possibleMillCoords = State.getPossibleMillCoordinates();
 
 module.exports = {
     State, 

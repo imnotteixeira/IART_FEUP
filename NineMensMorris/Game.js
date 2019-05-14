@@ -42,7 +42,7 @@ class Game {
             case PLAYER_TYPES.RANDOM:
                 return new RandomAIPlayer(id);
             case PLAYER_TYPES.MINIMAX:
-                return new MinimaxAIPlayer(id, 3);
+                return new MinimaxAIPlayer(id, 2);
             case PLAYER_TYPES.HUMAN:
                 return new HumanPlayer(id);    
         }
