@@ -46,7 +46,7 @@ class State {
         this.printBoard = this.printBoard.bind(this);
         this.playerLost = this.playerLost.bind(this);
         this.isGameOver = this.isGameOver.bind(this);
-        
+        this.getMillsOfPlayer = this.getMillsOfPlayer.bind(this);
     }
 
     isGameOver(){
@@ -227,6 +227,27 @@ class State {
             default:
                 return false;
         }
+    }
+
+    getMillsOfPlayer(player){
+        return this.getPossibleMillCoordinates().reduce(
+            (counter, possibleMillCoordinates) => 
+                possibleMillCoordinates.every(val => val === player) ? 
+                counter + 1 : counter
+        , 0);
+    }
+
+    getPossibleMillCoordinates(){
+        let result = [];
+        for(let i = 0; i < 24; i++){
+            if(i % 6 === 0){
+                result.push([i, i+1, i+2]);
+            }
+            if(Math.floor(i/3) % 2 === 1){
+                result.push([i, (i+3)%24, (i+6)%24]);
+            }
+        }
+        return result;
     }
 
     printBoard(){

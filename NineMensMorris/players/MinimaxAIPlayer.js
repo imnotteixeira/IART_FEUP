@@ -50,7 +50,7 @@ class MinimaxAIPlayer extends AIPlayer {
             return Infinity;
         else if (state.playerLost(0))
             return -Infinity;
-        else return state.n_pieces_in_board[0]-state.n_pieces_in_board[1];
+        else return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) + (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1));
     }
     
     getNextMove(state){
