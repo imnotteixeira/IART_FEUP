@@ -1,4 +1,4 @@
-const Player = require('./Player.js');
+const AIPlayer = require('./AIPlayer.js');
 
 
 class MinimaxAIPlayer extends AIPlayer {
@@ -54,4 +54,4 @@ class MinimaxAIPlayer extends AIPlayer {
     }    
 }
 
-module.exports = AIPlayer;
+module.exports = MinimaxAIPlayer;

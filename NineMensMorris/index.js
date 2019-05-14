@@ -9,7 +9,7 @@ const PLAYER_TYPES = require('./State.js').PLAYER_TYPES
 
 app.get('/', (req, res) => {
 
-    const player1_type = PLAYER_TYPES.HUMAN;
+    const player1_type = PLAYER_TYPES.AI;
     const player2_type = PLAYER_TYPES.AI;
     const first_player = 0;
 

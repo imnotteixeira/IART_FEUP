@@ -9,6 +9,10 @@ class AIPlayer extends Player {
         let moves = state.getValidMoves(this.id);
         return this.chooseNextMove(moves);
     }    
+
+    async play(state){
+        return this.getNextMove(state);
+    }
 }
 
 module.exports = AIPlayer;

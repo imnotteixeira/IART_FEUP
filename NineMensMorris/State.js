@@ -32,7 +32,7 @@ class State {
     constructor(current_player){
         this.board = new Array(BOARD_SIZE).fill(CELL_STATES.EMPTY);
         this.active_player = current_player;
-        this.n_turns = new Array(2).fill(5);
+        this.n_turns = new Array(2).fill(0);
         this.n_pieces_in_board = new Array(2).fill(0);
 
         //Function this binding
@@ -42,17 +42,14 @@ class State {
         this.removePiece = this.removePiece.bind(this);
         this.movePiece = this.movePiece.bind(this);
         this.isPlayerCell = this.isPlayerCell.bind(this);
+        this.printBoard = this.printBoard.bind(this);
+        this.playerLost = this.playerLost.bind(this);
         
     }
 
-    player1Won(){
-        return (this.n_pieces_in_board[CELL_STATES.PLAYER2] < 3 && getAction() != ACTIONS.PLACING) 
-        || this.getValidMoves(CELL_STATES.PLAYER2).length === 0;
-    }
-
-    player2Won(){
-        return (this.n_pieces_in_board[CELL_STATES.PLAYER1] < 3 && getAction() != ACTIONS.PLACING)
-        || this.getAction(CELL_STATES.PLAYER1).length === 0;
+    playerLost(player_id){
+        return (this.n_pieces_in_board[player_id] < 3 && this.getAction() !== ACTIONS.PLACING) 
+        || this.getValidMoves(player_id).length === 0;
     }
 
     getValidMoves(player){
@@ -65,6 +62,7 @@ class State {
                 states = this.getValidMovings(player);
                 break;
             case ACTIONS.FLYING:
+                states = this.getValidFlyings(player);
                 break;
         }
 
@@ -77,8 +75,10 @@ class State {
             if (this.board[i] === player){
                 DIRECTIONS.forEach(dir => {
                     let pos = (i+dir+24)%24;
-                    if (this.board[pos] === CELL_STATES.EMPTY && this.colinearPositions(i, pos))
-                        states.push(this.movePiece(player, i, pos));
+                    if (this.board[pos] === CELL_STATES.EMPTY && this.colinearPositions(i, pos)){
+                        let new_state = this.movePiece(player, i, pos);
+                        states.push(...new_state.generateStatesFromFormedMills(pos, player));
+                    }
                 });
             }
         }
@@ -109,14 +109,26 @@ class State {
         return states;
     }
 
-    isGameOver(){
-        return player1won() || player2won();
+    generateStatesFromFormedMills(pos, player){
+        if(this.checkMills(pos)){
+            return this.getValidRemovals(player);
+        }
+        return [this];
+    }
+
+    getValidRemovals(player){
+        return this.board.reduce((states, currentNode, i) => 
+            currentNode === (player + 1) % 2 ? 
+                [...states, this.removePiece(i)]
+            :
+                states
+        , []);
     }
 
     getAction() {
         if (this.n_turns[this.active_player] < MAX_PIECES_THRESHOLD)
             return ACTIONS.PLACING;
-        else if (this.n_pieces_in_board[this.active_player] < MIN_PIECES_THRESHOLD)
+        else if (this.n_pieces_in_board[this.active_player] <= MIN_PIECES_THRESHOLD)
             return ACTIONS.FLYING;
         else return ACTIONS.MOVING;
     }
@@ -148,34 +160,36 @@ class State {
     }
 
     getMillsFromCell(index) {
-        result = [];
+        let result = [];
 
-        if(Math.floor(i/3) % 2 === 1){ //is in a corner
-            result.push[
+        if(Math.floor(index/3) % 2 === 1){ //is in a corner
+            result.push([
                 index,
-                normalizeIndex(index-3),
-                normalizeIndex(index-6)
-            ];
+                this.normalizeIndex(index-3),
+                this.normalizeIndex(index-6)
+            ]);
 
-            result.push[
+            result.push([
                 index,
-                normalizeIndex(index+3),
-                normalizeIndex(index+6)
-            ];
+                this.normalizeIndex(index+3),
+                this.normalizeIndex(index+6)
+            ]);
         }else{
             const firstIndex = Math.floor(index/3)*3
             result.push([
-                normalizeIndex(firstIndex),
-                normalizeIndex(firstIndex+1),
-                normalizeIndex(firstIndex+2),
+                this.normalizeIndex(firstIndex),
+                this.normalizeIndex(firstIndex+1),
+                this.normalizeIndex(firstIndex+2),
             ]);
 
-            result.push[
+            result.push([
                 index,
-                normalizeIndex(index-3),
-                normalizeIndex(index+3)
-            ];
+                this.normalizeIndex(index-3),
+                this.normalizeIndex(index+3)
+            ]);
         }
+
+        return result;
     }
 
     normalizeIndex(index){
@@ -183,12 +197,12 @@ class State {
     }
 
     checkMills(board_idx){
-        lines = getMillsFromCell(board_id);
-        return checkMill(lines[0]) || checkMill(lines[1]);
+        const lines = this.getMillsFromCell(board_idx);
+        return this.checkMill(lines[0]) || this.checkMill(lines[1]);
     }
 
     checkMill(line) {
-        return line.every(val => isPlayerCell(val));
+        return line.every(val => this.isPlayerCell(this.board[val]));
     }
     
     isPlayerCell(val){
@@ -209,14 +223,37 @@ class State {
         }
     }
 
+    printBoard(){
+        const b = this.board;
 
-    
+        console.log("\n",
+        `7   ${CELL_VIEWS[b[23]]} --------------------- ${CELL_VIEWS[b[2]]} --------------------- ${CELL_VIEWS[b[5]]}\n`,
+        `    |                       |                       |\n`,
+        `    |                       |                       |\n`,
+        `6   |       ${CELL_VIEWS[b[22]]} ------------- ${CELL_VIEWS[b[1]]} ------------- ${CELL_VIEWS[b[4]]}       |\n`,
+        `    |       |               |               |       |\n`,
+        `    |       |               |               |       |\n`,
+        `5   |       |       ${CELL_VIEWS[b[21]]} ----- ${CELL_VIEWS[b[0]]} ----- ${CELL_VIEWS[b[3]]}       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `4   ${CELL_VIEWS[b[20]]} ----- ${CELL_VIEWS[b[19]]} ----- ${CELL_VIEWS[b[18]]}               ${CELL_VIEWS[b[6]]} ----- ${CELL_VIEWS[b[7]]} ----- ${CELL_VIEWS[b[8]]}\n`,
+        `    |       |       |               |       |       |\n`,
+        `    |       |       |               |       |       |\n`,
+        `3   |       |       ${CELL_VIEWS[b[15]]} ----- ${CELL_VIEWS[b[12]]} ----- ${CELL_VIEWS[b[9]]}       |       |\n`,
+        `    |       |               |               |       |\n`,
+        `    |       |               |               |       |\n`,
+        `2   |       ${CELL_VIEWS[b[16]]} ------------- ${CELL_VIEWS[b[13]]} ------------- ${CELL_VIEWS[b[10]]}       |\n`,
+        `    |                       |                       |\n`,
+        `    |                       |                       |\n`,
+        `1   ${CELL_VIEWS[b[17]]} --------------------- ${CELL_VIEWS[b[14]]} --------------------- ${CELL_VIEWS[b[11]]}\n`,
+        `                                         \n`,
+        `    A       B       C       D       E       F       G`);
+    }
 }
 
 module.exports = {
     State, 
     PLAYER_TYPES,
     ACTIONS, 
-    CELL_STATES,
-    CELL_VIEWS
+    CELL_STATES
 }

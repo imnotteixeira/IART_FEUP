@@ -48,23 +48,29 @@ class HumanPlayer extends Player {
     }
 
     async playPlacing(state){
+        console.log("PLACING");
+        let coordinates;
         while(true){
 
-            const coordinates = await this.getInputCoordinates();
+            coordinates = await this.getInputCoordinates();
 
             if(this.isValidCoordinateInput(coordinates)){
                 try{
-                    return this.addPiece(state, coordinates);
+                    state = this.addPiece(state, coordinates);
+                    break;
                 } catch(e) {}
             }
             
             console.log("Not a valid move! Try again");
         }
+        return await this.checkFormedMillAndRemoveOpponent(state, COORDINATES_READABLE[coordinates]);
     }
 
     async playMoving(state){
 
+        console.log("MOVING");
         const index = await this.getInputPieceOwn(state);
+        let destIndex;
 
         while(true){
 
@@ -72,17 +78,49 @@ class HumanPlayer extends Player {
 
             if(this.isValidCoordinateInput(coordinates)){
                 try{
-                    const destIndex = COORDINATES_READABLE[coordinates];
-                    return this.move(state, index, destIndex);
+                    destIndex = COORDINATES_READABLE[coordinates];
+                    state = this.move(state, index, destIndex);
+                    break;
                 } catch(e) {}
             }
             
             console.log("Not a valid move! try again");
         }
+        return this.checkFormedMillAndRemoveOpponent(state, destIndex);
+    }
+
+    async playFlying(state){
+
+        console.log("FLYING");
+        const index = await this.getInputPieceOwn(state);
+        let destIndex;
+
+        while(true){
+
+            const coordinates = await this.getInputCoordinates();
+
+            if(this.isValidCoordinateInput(coordinates)){
+                try{
+                    destIndex = COORDINATES_READABLE[coordinates];
+                    state = this.fly(state, index, destIndex);
+                    break;
+                } catch(e) {}
+            }
+            
+            console.log("Not a valid move! try again");
+        }
+        return this.checkFormedMillAndRemoveOpponent(state, destIndex);
     }
 
     move(state, idx1, idx2){
         if(state.colinearPositions(idx1, idx2) && state.board[idx2] === CELL_STATES.EMPTY){
+            return state.addPiece(this.id, idx2).removePiece(idx1);
+        }
+        throw "Invalid move";
+    }
+
+    fly(state, idx1, idx2){
+        if(state.board[idx2] === CELL_STATES.EMPTY){
             return state.addPiece(this.id, idx2).removePiece(idx1);
         }
         throw "Invalid move";
@@ -122,6 +160,25 @@ class HumanPlayer extends Player {
 
     isValidCoordinateInput(input) {
         return Object.keys(COORDINATES_READABLE).includes(input);
+    }
+
+    async checkFormedMillAndRemoveOpponent(state, index){
+        if(state.checkMills(index)){
+            state.printBoard();
+            while(true){
+                const coordinates = await new Promise( (resolve) => {
+                    readline.question(`A mill was formed. Please select an opponent's piece to remove (e.g. a7): `, coordinates => {
+                        return resolve(coordinates);
+                    });
+                })
+                const board_index = COORDINATES_READABLE[coordinates];
+                if(state.board[board_index] === (this.id + 1) % 2){
+                    return state.removePiece(board_index);
+                }
+                console.log("The selected node is not valid");
+            }
+        }
+        return state;
     }
 }
 
