@@ -232,11 +232,13 @@ class State {
     }
 
     getMillsOfPlayer(player){
-        return possibleMillCoords.reduce(
+        let b = possibleMillCoords.reduce(
             (counter, possibleMillCoordinates) => 
                 possibleMillCoordinates.every(val => this.board[val] === player) ? 
                 counter + 1 : counter
         , 0);
+
+        return b;
     }
 
     static getPossibleMillCoordinates(){

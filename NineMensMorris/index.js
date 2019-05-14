@@ -10,7 +10,7 @@ const PLAYER_TYPES = require('./State.js').PLAYER_TYPES
 app.get('/', (req, res) => {
 
     const player1_type = PLAYER_TYPES.MINIMAX;
-    const player2_type = PLAYER_TYPES.HUMAN;
+    const player2_type = PLAYER_TYPES.MINIMAX;
     const first_player = 0;
 
     const game = new Game(player1_type, player2_type, first_player);
