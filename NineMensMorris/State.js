@@ -1,5 +1,6 @@
 const PLAYER_TYPES = Object.freeze({ 
-    AI:"AI",
+    RANDOM:"RANDOM",
+    MINIMAX:"MINIMAX",
     HUMAN: "HUMAN"
 });
 
@@ -44,7 +45,12 @@ class State {
         this.isPlayerCell = this.isPlayerCell.bind(this);
         this.printBoard = this.printBoard.bind(this);
         this.playerLost = this.playerLost.bind(this);
+        this.isGameOver = this.isGameOver.bind(this);
         
+    }
+
+    isGameOver(){
+        return this.playerLost(0) || this.playerLost(1);
     }
 
     playerLost(player_id){

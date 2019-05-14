@@ -1,6 +1,7 @@
 const PLAYER_TYPES = require('./State.js').PLAYER_TYPES;
 const HumanPlayer = require('./players/HumanPlayer.js');
 const RandomAIPlayer = require('./players/RandomAIPlayer.js');
+const MinimaxAIPlayer = require('./players/MinimaxAIPlayer.js');
 const State = require('./State.js').State;
 
 class Game {
@@ -38,8 +39,10 @@ class Game {
    
     createPlayer(playerType, id) {
         switch(playerType){
-            case PLAYER_TYPES.AI:
+            case PLAYER_TYPES.RANDOM:
                 return new RandomAIPlayer(id);
+            case PLAYER_TYPES.MINIMAX:
+                return new MinimaxAIPlayer(id, 2);
             case PLAYER_TYPES.HUMAN:
                 return new HumanPlayer(id);    
         }

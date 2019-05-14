@@ -3,47 +3,52 @@ const AIPlayer = require('./AIPlayer.js');
 
 class MinimaxAIPlayer extends AIPlayer {
 
-    constructor(depth){
+    constructor(id, depth){
+        super(id);
         this.depth = depth;
     }
 
-    chooseNextMove(moves, depth) {
-        if (depth === 0)
-            return;
-        
-        chooseNextMove()    
-
+    async play(state){
+        return this.minimax(state, this.depth, this.id === 0);
     }
 
     minimax(state, depth, maximizing_player) {
         if (depth == 0 || state.isGameOver()) {// or game over in position
-            return this.evaluateState(state);//static evaluation of position 
+            return state;//static evaluation of position 
         }
-        const valid_moves = state.getValidMoves();
+        const valid_moves = state.getValidMoves(this.id);
 
-        if(maximizingPlayer) {
-            let max_eval = -Infinity;
+        if(maximizing_player) {
+            let max_val = -Infinity;
 
             valid_moves.forEach(child_state => {
-                eval = minimax(child_state, depth - 1, false);
-                max_eval = max(max_eval, eval);
+                let generatedState = this.minimax(child_state, depth - 1, false);
+                let val = this.evaluateState(generatedState);
+                max_val = Math.max(max_val, val);
+                if(val > max_val){
+                    max_val = val;
+                    state = generatedState;
+                }
             });                
-            
-            return max_eval;
         } else {
-            let min_eval = Infinity;
+            let min_val = Infinity;
             valid_moves.forEach(child_state => {
-                eval = minimax(child, depth - 1, true)
-                min_eval = min(min_eval, eval)
+                let generatedState = this.minimax(child_state, depth - 1, true)
+                let val = this.evaluateState(generatedState);
+                if(val < min_val){
+                    min_val = val;
+                    state = generatedState;
+                }
             });
-            return min_eval;
         }
+
+        return state;
     }
       
     evaluateState(state){
-        if (state.player0Won())
+        if (state.playerLost(1))
             return Infinity;
-        else if (state.player1Won())
+        else if (state.playerLost(0))
             return -Infinity;
         else return state.n_pieces_in_board[0]-state.n_pieces_in_board[1];
     }
