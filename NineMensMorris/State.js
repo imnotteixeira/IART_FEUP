@@ -200,6 +200,10 @@ class State {
         return result;
     }
 
+    isCellEmpty(board_idx){
+        return this.board[board_idx] === CELL_STATES.EMPTY;
+    }
+
     static normalizeIndex(index){
         return (index + BOARD_SIZE) % BOARD_SIZE;
     }
