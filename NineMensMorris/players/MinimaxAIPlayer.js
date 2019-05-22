@@ -10,49 +10,39 @@ class MinimaxAIPlayer extends AIPlayer {
     }
 
     chooseNextMove(moves) {
-        let best_value = this.id === 0 ? -Infinity : Infinity;
-        let best_move;
-        console.log("Minimax Cuts: ", this.minimaxCuts);
 
-        moves.sort((x, y) => {
+        console.log("number of moves first level: " + moves.length);
 
-            const x_val = this.evaluateState(x);
-            const y_val = this.evaluateState(y);
-
-            if (x_val < y_val) {
-              return this.id !== 0 ? -1 : 1;
+        let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id !== 0)}));
+ 
+        moveValues = moveValues.sort((a,b) => {
+            if(a.value === b.value){
+                return 0;
+            }else if(a.value < b.value){
+                return this.id === 0 ? 1 : -1;
+            }else{
+                return this.id === 0 ? -1 : 1;
             }
-            if (x_val > y_val) {
-              return this.id !== 0 ? 1 : -1; ;
-            }
-            return 0;
-          });
-        
-        for(let move of moves){
-            const val = this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id !== 0);
-            /*move.printBoard();
-            //console.log("val = ", val);
-            console.log(move.getMillsOfPlayer(0), move.getMillsOfPlayer(1))
-            var sleep = require('system-sleep');
-            sleep(2*1000); // sleep for 10 seconds*/
+        });
 
-            if(this.id === 0){
-                if(val > best_value){
-                    best_value = val;
-                    best_move = move;
-                }
-            } else {
-                if(val < best_value){
-                    best_value = val;
-                    best_move = move;
-                }
+        let best_value = moveValues[0].value;
+        let chosen_move = moveValues[0].move;
+        for(let i in moveValues){
+            if(moveValues[i].value !== best_value){
+                chosen_move = moveValues[Math.floor(Math.random()*i)].move;
+                console.log("Amount of best moves: " + i);
+                break;
             }
         }
 
+        console.log("cuts: ", this.minimaxCuts);
+        this.minimaxCuts = 0;
+
+        console.log(moveValues[0].value);
+
         //console.log(best_move.n_pieces_in_board[0], best_move.n_pieces_in_board[1], best_move.getMillsOfPlayer(0), best_move.getMillsOfPlayer(1));
         //console.log("ID: ", this.id, " - VAL: ", best_value);
-
-        return best_move;
+        return chosen_move;
     }
 
     minimax(state, depth, alpha, beta, maximizing_player) {
