@@ -19,6 +19,7 @@ class Game {
     }
 
     async run(){
+        var hrstart = process.hrtime();
         while(true){
             if(this.state.playerLost(0)){
                 console.log("PLAYER 1 WON");
@@ -29,8 +30,10 @@ class Game {
             }else{
                 await this.update();
                 this.state.printBoard();
+                console.log("NTurns: " + (this.state.n_turns[0] + this.state.n_turns[1]));
             }
         }
+        console.log("Finished in " + process.hrtime(hrstart)[0] + " seconds");
     }
 
     isGameOver(){
