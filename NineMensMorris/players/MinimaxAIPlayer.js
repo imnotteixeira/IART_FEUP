@@ -1,10 +1,10 @@
 const AIPlayer = require('./AIPlayer.js');
-
+const CSVExport = require('../Exporter.js').CSVExport;
 
 class MinimaxAIPlayer extends AIPlayer {
 
-    constructor(id, depth){
-        super(id);
+    constructor(id, depth, exportData){
+        super(id, exportData);
         this.depth = depth;
         this.minimaxCuts = 0;
     }
@@ -12,6 +12,8 @@ class MinimaxAIPlayer extends AIPlayer {
     chooseNextMove(moves) {
 
         console.log("number of moves first level: " + moves.length);
+
+        this.statesCount = moves.length;
 
         let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id !== 0)}));
  
@@ -38,6 +40,8 @@ class MinimaxAIPlayer extends AIPlayer {
         console.log("cuts: ", this.minimaxCuts);
         this.minimaxCuts = 0;
 
+        if(this.exportData) CSVExport(`, ${this.statesCount}`);
+
         console.log(moveValues[0].value);
 
         //console.log(best_move.n_pieces_in_board[0], best_move.n_pieces_in_board[1], best_move.getMillsOfPlayer(0), best_move.getMillsOfPlayer(1));
@@ -46,7 +50,8 @@ class MinimaxAIPlayer extends AIPlayer {
     }
 
     minimax(state, depth, alpha, beta, maximizing_player) {
-        
+
+        this.statesCount++;
 
         if (depth === 0 || state.isGameOver()) {// or game over in position
             return (depth + 1) * this.evaluateState(state);
