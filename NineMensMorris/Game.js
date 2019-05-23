@@ -12,13 +12,15 @@ class Game {
 
         this.players = [this.createPlayer(player1_type, 0), this.createPlayer(player2_type, 1)];
         
+        this.startTime = process.hrtime();
+
         this.state = new State(first_player);
         
         if(this.exportData) CSVExport(`
             \n\n------MATCH------
             \nPlayer Types:, ${player1_type.type}, ${player2_type.type}
             \nDepths:, ${player1_type.depth || '-'}, ${player2_type.depth || '-'}
-            \n\nPlay, Expanded Nodes Player 1, Play Execution Time Player 1, Expanded Nodes Player 2, Play Execution Time Player 2
+            \nPlay, Expanded Nodes P1, Play Time (ms) P1, Play Action P1, Expanded Nodes P2, Play Time (ms) P2, Play Action P2
         `);
 
         //bindings
@@ -26,6 +28,7 @@ class Game {
         this.update = this.update.bind(this);
         this.getActivePlayer = this.getActivePlayer.bind(this);
         this.switchPlayer = this.switchPlayer.bind(this);
+
     }
 
     async run(){
@@ -43,6 +46,8 @@ class Game {
                 this.state.printBoard();
             }
         }
+        if(this.exportData) CSVExport(`\n\nTotal Elapsed Time:, ${(process.hrtime(this.startTime)[1] / 1000000)}, Winner:, ${this.state.playerLost(0) ? 1 : 0}`);
+
     }
 
     isGameOver(){

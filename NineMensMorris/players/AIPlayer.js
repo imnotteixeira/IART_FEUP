@@ -10,7 +10,7 @@ class AIPlayer extends Player {
         let hrstart = process.hrtime();
         let moves = state.getValidMoves(this.id);
         let result = this.chooseNextMove(moves);
-        CSVExport(", " + (process.hrtime(hrstart)[1] / 1000000));
+        if(this.exportData) CSVExport(", " + (process.hrtime(hrstart)[1] / 1000000) + ", " + state.getAction());
         return result;
     }    
 

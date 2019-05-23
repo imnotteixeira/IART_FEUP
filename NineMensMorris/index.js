@@ -29,19 +29,20 @@ app.get('/export', async (req, res) => {
     
     const matches = [
         [PLAYER_RANDOM, PLAYER_RANDOM],
-        //[PLAYER_MINIMAX_2, PLAYER_MINIMAX_2],
-        //[PLAYER_MINIMAX_3, PLAYER_MINIMAX_3],
+        [PLAYER_MINIMAX_2, PLAYER_MINIMAX_2],
+        [PLAYER_MINIMAX_3, PLAYER_MINIMAX_3],
 
-        //[PLAYER_RANDOM, PLAYER_MINIMAX_1],
-        //[PLAYER_RANDOM, PLAYER_MINIMAX_2],
-        //[PLAYER_RANDOM, PLAYER_MINIMAX_3],
+        [PLAYER_RANDOM, PLAYER_MINIMAX_1],
+        [PLAYER_RANDOM, PLAYER_MINIMAX_2],
+        [PLAYER_RANDOM, PLAYER_MINIMAX_3],
 
-        //[PLAYER_MINIMAX_1, PLAYER_MINIMAX_2],
-        //[PLAYER_MINIMAX_1, PLAYER_MINIMAX_3],
-        //[PLAYER_MINIMAX_2, PLAYER_MINIMAX_3],
+        [PLAYER_MINIMAX_1, PLAYER_MINIMAX_2],
+        [PLAYER_MINIMAX_1, PLAYER_MINIMAX_3],
+        [PLAYER_MINIMAX_2, PLAYER_MINIMAX_3],
 
-        //[PLAYER_MINIMAX_3_NO_PRUNE, PLAYER_MINIMAX_3],
+        [PLAYER_MINIMAX_3_NO_PRUNE, PLAYER_MINIMAX_3],
     ]
+    
 
     for(let match of matches){
         const game = new Game(match[0], match[1], 0, true);
