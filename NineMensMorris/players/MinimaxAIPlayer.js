@@ -3,9 +3,11 @@ const CSVExport = require('../Exporter.js').CSVExport;
 
 class MinimaxAIPlayer extends AIPlayer {
 
-    constructor(id, depth, exportData){
+    constructor(id, depth, dont_prune, prioritize_mills, exportData){
         super(id, exportData);
         this.depth = depth;
+        this.prioritize_mills = prioritize_mills;
+        this.dont_prune = dont_prune;
         this.minimaxCuts = 0;
     }
 
@@ -68,7 +70,7 @@ class MinimaxAIPlayer extends AIPlayer {
                 const val = this.minimax(child_state, depth - 1, alpha, beta, false);
                 max_val = Math.max(max_val, val);
                 alpha = Math.max(alpha, val)
-                if (beta <= alpha) {
+                if (beta <= alpha && !this.dont_prune) {
                     this.minimaxCuts++;
                     break;
                 }
@@ -82,7 +84,7 @@ class MinimaxAIPlayer extends AIPlayer {
                 const val = this.minimax(child_state, depth - 1, alpha, beta, true)
                 min_val = Math.min(min_val, val);
                 beta = Math.min(beta, val)
-                if (beta <= alpha) {
+                if (beta <= alpha && !this.dont_prune) {
                     this.minimaxCuts++
                     break;
                 }
@@ -103,7 +105,7 @@ class MinimaxAIPlayer extends AIPlayer {
             state.printBoard();
             console.log(state.n_pieces_in_board[0], state.n_pieces_in_board[1], state.getMillsOfPlayer(0), state.getMillsOfPlayer(1));
             console.log(" -------------------------------------")*/
-            return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) * 0.2 + (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1)) * 0.8;
+            return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) * 0.2 + this.prioritize_mills ? (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1)) * 0.8 : 0;
         }
     }
 }

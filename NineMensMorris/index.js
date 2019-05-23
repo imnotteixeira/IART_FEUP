@@ -26,6 +26,7 @@ app.get('/export', async (req, res) => {
     const PLAYER_MINIMAX_2 = {type: PLAYER_TYPES.MINIMAX, depth: 2};
     const PLAYER_MINIMAX_3_NO_PRUNE = {type: PLAYER_TYPES.MINIMAX, depth: 3, dont_prune: true};
     const PLAYER_MINIMAX_3 = {type: PLAYER_TYPES.MINIMAX, depth: 3};
+    const PLAYER_MINIMAX_3_EVAL_MILLS = {type: PLAYER_TYPES.MINIMAX, prioritize_mills: true, depth: 3};
     
     const matches = [
         [PLAYER_RANDOM, PLAYER_RANDOM],
@@ -41,6 +42,8 @@ app.get('/export', async (req, res) => {
         [PLAYER_MINIMAX_2, PLAYER_MINIMAX_3],
 
         [PLAYER_MINIMAX_3_NO_PRUNE, PLAYER_MINIMAX_3],
+
+        [PLAYER_MINIMAX_3_EVAL_MILLS, PLAYER_MINIMAX_3],
     ]
     
 

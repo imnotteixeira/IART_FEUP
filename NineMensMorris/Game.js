@@ -20,6 +20,8 @@ class Game {
             \n\n------MATCH------
             \nPlayer Types:, ${player1_type.type}, ${player2_type.type}
             \nDepths:, ${player1_type.depth || '-'}, ${player2_type.depth || '-'}
+            \nUsing pruning:, ${player1_type.type === PLAYER_TYPES.MINIMAX ? !player1_type.dont_prune : '-'}, ${player2_type.type === PLAYER_TYPES.MINIMAX ? !player2_type.dont_prune : '-'}
+            \nHeuristic prioritizing mills:, ${player1_type.type === PLAYER_TYPES.MINIMAX ? !!player1_type.prioritize_mills : '-'}, ${player2_type.type === PLAYER_TYPES.MINIMAX ? !!player2_type.prioritize_mills : '-'}
             \nPlay, Expanded Nodes P1, Play Time (ms) P1, Play Action P1, Expanded Nodes P2, Play Time (ms) P2, Play Action P2
         `);
 
@@ -59,9 +61,9 @@ class Game {
             case PLAYER_TYPES.RANDOM:
                 return new RandomAIPlayer(id, this.exportData);
             case PLAYER_TYPES.MINIMAX:
-                return new MinimaxAIPlayer(id, playerType.depth, this.exportData);
+                return new MinimaxAIPlayer(id, playerType.depth, playerType.dont_prune, playerType.prioritize_mills, this.exportData);
             case PLAYER_TYPES.HUMAN:
-                return new HumanPlayer(id);    
+                return new HumanPlayer(id);    2
         }
     }
 
