@@ -1,0 +1,177 @@
+
+        
+
+------MATCH------
+        
+Player Types:, RANDOM, RANDOM
+        
+Depths:, -, -
+        
+Using pruning:, -, -
+        
+Heuristic prioritizing mills:, -, -
+        
+P1 Winning Probability:, 0.55
+        
+P2 Winning Probability:, 0.45
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 2, 2
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, false, false
+        
+P1 Winning Probability:, 0.6
+        
+P2 Winning Probability:, 0.4
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 3, 3
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, false, false
+        
+P1 Winning Probability:, 0.35
+        
+P2 Winning Probability:, 0.65
+        
+        
+
+------MATCH------
+        
+Player Types:, RANDOM, MINIMAX
+        
+Depths:, -, 1
+        
+Using pruning:, -, true
+        
+Heuristic prioritizing mills:, -, true
+        
+P1 Winning Probability:, 0.050000000000000044
+        
+P2 Winning Probability:, 0.95
+        
+        
+
+------MATCH------
+        
+Player Types:, RANDOM, MINIMAX
+        
+Depths:, -, 2
+        
+Using pruning:, -, true
+        
+Heuristic prioritizing mills:, -, false
+        
+P1 Winning Probability:, 0
+        
+P2 Winning Probability:, 1
+        
+        
+
+------MATCH------
+        
+Player Types:, RANDOM, MINIMAX
+        
+Depths:, -, 3
+        
+Using pruning:, -, true
+        
+Heuristic prioritizing mills:, -, false
+        
+P1 Winning Probability:, 0
+        
+P2 Winning Probability:, 1
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 1, 3
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, true, true
+        
+P1 Winning Probability:, 0.4
+        
+P2 Winning Probability:, 0.6
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 1, 3
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, true, false
+        
+P1 Winning Probability:, 0.30000000000000004
+        
+P2 Winning Probability:, 0.7
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 2, 3
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, false, false
+        
+P1 Winning Probability:, 0.5
+        
+P2 Winning Probability:, 0.5
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 3, 3
+        
+Using pruning:, false, true
+        
+Heuristic prioritizing mills:, false, false
+        
+P1 Winning Probability:, 0.44999999999999996
+        
+P2 Winning Probability:, 0.55
+        
+        
+
+------MATCH------
+        
+Player Types:, MINIMAX, MINIMAX
+        
+Depths:, 3, 3
+        
+Using pruning:, true, true
+        
+Heuristic prioritizing mills:, true, false
+        
+P1 Winning Probability:, 0.5
+        
+P2 Winning Probability:, 0.5
+        
