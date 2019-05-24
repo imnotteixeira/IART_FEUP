@@ -36,6 +36,7 @@ class Game {
     async run(){
         let winner = 0;
         while(true){
+            this.state.printBoard();
             if(this.state.playerLost(0)){
                 console.log("PLAYER 1 WON");
                 winner = 1;
@@ -50,7 +51,6 @@ class Game {
             }else{
                 if(this.state.active_player === 0 && this.exportData) CSVExport(`\n${this.state.n_turns[0]}`);
                 await this.update();
-                this.state.printBoard();
             }
         }
         if(this.exportData) CSVExport(`\n\nTotal Elapsed Time:, ${(process.hrtime(this.startTime)[1] / 1000000)}, Winner:, ${winner}`);

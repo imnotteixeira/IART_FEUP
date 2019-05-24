@@ -73,14 +73,25 @@ const readPlayerType = async (player_label) => {
 }
 
 const init = async () => {
-    const player1_type = await readPlayerType("Player 1");
-    const player2_type = await readPlayerType("Player 2");
+    while(true) {
+        console.log('====================================');
+        console.log("Nine Men's Morris");
+        console.log('====================================');
+        console.log('====================================');
+        console.log('^C to Exit');
+        console.log('====================================');
+        
+        const player1_type = await readPlayerType("Player 0");
+        const player2_type = await readPlayerType("Player 1");
+        
+        //ask to choose first player
+        const first_player = 0;
+        
+        const game = new Game(player1_type, player2_type, first_player);
+        await game.run();
+        console.log("\n\n");
+    }
     
-    //ask to choose first player
-    const first_player = 0;
-    
-    const game = new Game(player1_type, player2_type, first_player);
-    game.run();
 }
 
 init();
