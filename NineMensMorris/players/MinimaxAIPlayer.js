@@ -17,7 +17,7 @@ class MinimaxAIPlayer extends AIPlayer {
 
         this.statesCount = moves.length;
 
-        let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id === 0)}));
+        let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -100000, 100000, this.id === 0)}));
 
         moveValues = moveValues.sort((a,b) => {
             if(a.value === b.value){
@@ -61,7 +61,7 @@ class MinimaxAIPlayer extends AIPlayer {
         const valid_moves = state.getValidMoves(maximizing_player ? 0:1);
 
         if(maximizing_player) {
-            let max_val = -Infinity;
+            let max_val = -100000;
 
             for (let i = 0; i < valid_moves.length; i++) {
                 const child_state = valid_moves[i];
@@ -76,7 +76,7 @@ class MinimaxAIPlayer extends AIPlayer {
             }                
             return max_val;
         } else {
-            let min_val = Infinity;
+            let min_val = 100000;
             for (let i = 0; i < valid_moves.length; i++) {
                 const child_state = valid_moves[i];
                 
@@ -96,9 +96,9 @@ class MinimaxAIPlayer extends AIPlayer {
       
     evaluateState(state){
         if (state.playerLost(1))
-            return Infinity;
+            return 100000;
         else if (state.playerLost(0))
-            return -Infinity;
+            return -100000;
         else {
             /*console.log("ANALYSNG ---------------------------")
             state.printBoard();

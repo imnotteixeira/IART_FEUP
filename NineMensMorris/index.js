@@ -12,8 +12,8 @@ const PLAYER_TYPES = require('./State.js').PLAYER_TYPES
 
 app.get('/', (req, res) => {
 
-    const player1_type = {type: PLAYER_TYPES.MINIMAX};
-    const player2_type = {type: PLAYER_TYPES.MINIMAX};
+    const player1_type = {type: PLAYER_TYPES.MINIMAX, depth: 3};
+    const player2_type = {type: PLAYER_TYPES.MINIMAX, depth: 3};
     const first_player = 0;
 
     const game = new Game(player1_type, player2_type, first_player);
@@ -50,6 +50,50 @@ app.get('/export', async (req, res) => {
 
 
     for(let match of matches){
+        const game = new Game(match[0], match[1], 0, true);
+        await game.run();
+    }
+    CSVSubmit("exported.csv");
+    res.json(0);
+});
+
+app.get('/export-winners', async (req, res) => {
+
+    const PLAYER_RANDOM = {type: PLAYER_TYPES.RANDOM};
+    const PLAYER_MINIMAX_1 = {type: PLAYER_TYPES.MINIMAX, depth: 1, prioritize_mills: true};
+    const PLAYER_MINIMAX_2 = {type: PLAYER_TYPES.MINIMAX, depth: 2};
+    const PLAYER_MINIMAX_3_NO_PRUNE = {type: PLAYER_TYPES.MINIMAX, depth: 3, dont_prune: true};
+    const PLAYER_MINIMAX_3 = {type: PLAYER_TYPES.MINIMAX, depth: 3};
+    const PLAYER_MINIMAX_3_EVAL_MILLS = {type: PLAYER_TYPES.MINIMAX, prioritize_mills: true, depth: 3};
+    
+    const matches = [
+        // [PLAYER_RANDOM, PLAYER_RANDOM],
+        // [PLAYER_MINIMAX_2, PLAYER_MINIMAX_2],
+        // [PLAYER_MINIMAX_3, PLAYER_MINIMAX_3],
+
+        // [PLAYER_RANDOM, PLAYER_MINIMAX_1],
+        // [PLAYER_RANDOM, PLAYER_MINIMAX_2],
+        // [PLAYER_RANDOM, PLAYER_MINIMAX_3],
+
+        // [PLAYER_MINIMAX_1, PLAYER_MINIMAX_3_EVAL_MILLS],
+        // [PLAYER_MINIMAX_1, PLAYER_MINIMAX_3],
+        // [PLAYER_MINIMAX_2, PLAYER_MINIMAX_3],
+
+        [PLAYER_MINIMAX_3_NO_PRUNE, PLAYER_MINIMAX_3],
+        [PLAYER_MINIMAX_3, PLAYER_MINIMAX_3_NO_PRUNE],
+
+        // [PLAYER_MINIMAX_3_EVAL_MILLS, PLAYER_MINIMAX_3]
+    ]
+
+
+    for(let match of matches){
+        console.log("_--------------------------------------------------");
+        console.log("_--------------------------------------------------");
+        console.log("_--------------------------------------------------");
+        console.log(match)
+        console.log("_--------------------------------------------------");
+        console.log("_--------------------------------------------------");
+        console.log("_--------------------------------------------------");
         let winnerSum = 0;
         for(let i = 0; i < 20; i++){
             const game = new Game(match[0], match[1], 0, false);
@@ -66,7 +110,7 @@ app.get('/export', async (req, res) => {
         \nP2 Winning Probability:, ${winningProbability}
         `);
     }
-    CSVSubmit();
+    CSVSubmit("exported-winners.csv");
     res.json(0);
 });
 
