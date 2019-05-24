@@ -1,7 +1,8 @@
 class Player {
     
-    constructor(id){
+    constructor(id, exportData){
         this.id = id;
+        this.exportData = exportData;
     }
 
     async play(state) {

@@ -54,13 +54,13 @@ class State {
     }
 
     playerLost(player_id){
-        return (this.n_pieces_in_board[player_id] < 3 && this.getAction() !== ACTIONS.PLACING) 
+        return (this.n_pieces_in_board[player_id] < 3 && this.getAction(player_id) !== ACTIONS.PLACING) 
         || this.getValidMoves(player_id).length === 0;
     }
 
     getValidMoves(player){
         let states = [];
-        switch(this.getAction()){
+        switch(this.getAction(player)){
             case ACTIONS.PLACING:
                 states = this.getValidPlacings(player);
                 break;
@@ -108,6 +108,7 @@ class State {
             if (this.board[i] === player){
                 for(let j = 0; j < this.board.length; j++){
                     if (this.board[j] === CELL_STATES.EMPTY){
+                        // console.log("POSSIBLE FLYING COORDS: " + i, ", " + j);
                         let new_state = this.movePiece(player, i, j);
                         states.push(...new_state.generateStatesFromFormedMills(j, player));
                     } 
@@ -133,10 +134,10 @@ class State {
         , []);
     }
 
-    getAction() {
-        if (this.n_turns[this.active_player] < MAX_PIECES_THRESHOLD)
+    getAction(player) {
+        if (this.n_turns[player] < MAX_PIECES_THRESHOLD)
             return ACTIONS.PLACING;
-        else if (this.n_pieces_in_board[this.active_player] <= MIN_PIECES_THRESHOLD)
+        else if (this.n_pieces_in_board[player] <= MIN_PIECES_THRESHOLD)
             return ACTIONS.FLYING;
         else return ACTIONS.MOVING;
     }
