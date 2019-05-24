@@ -17,8 +17,8 @@ class MinimaxAIPlayer extends AIPlayer {
 
         this.statesCount = moves.length;
 
-        let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id !== 0)}));
- 
+        let moveValues = moves.map((move, i) => ({move, value: this.minimax(move, this.depth - 1, -Infinity, Infinity, this.id === 0)}));
+
         moveValues = moveValues.sort((a,b) => {
             if(a.value === b.value){
                 return 0;
@@ -44,10 +44,9 @@ class MinimaxAIPlayer extends AIPlayer {
 
         if(this.exportData) CSVExport(`, ${this.statesCount}`);
 
-        console.log(moveValues[0].value);
-
         //console.log(best_move.n_pieces_in_board[0], best_move.n_pieces_in_board[1], best_move.getMillsOfPlayer(0), best_move.getMillsOfPlayer(1));
         //console.log("ID: ", this.id, " - VAL: ", best_value);
+
         return chosen_move;
     }
 
@@ -105,7 +104,7 @@ class MinimaxAIPlayer extends AIPlayer {
             state.printBoard();
             console.log(state.n_pieces_in_board[0], state.n_pieces_in_board[1], state.getMillsOfPlayer(0), state.getMillsOfPlayer(1));
             console.log(" -------------------------------------")*/
-            return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) * 0.2 + this.prioritize_mills ? (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1)) * 0.8 : 0;
+            return (state.n_pieces_in_board[0]-state.n_pieces_in_board[1]) * 0.2 + (this.prioritize_mills ? (state.getMillsOfPlayer(0) - state.getMillsOfPlayer(1)) * 0.8 : 0);
         }
     }
 }

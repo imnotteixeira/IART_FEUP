@@ -37,7 +37,7 @@ const COORDINATES_READABLE = Object.freeze({
 class HumanPlayer extends Player {
 
     async play(state){
-        switch(state.getAction()){
+        switch(state.getAction(this.id)){
             case ACTIONS.PLACING:
                 return await this.playPlacing(state);
             case ACTIONS.MOVING:

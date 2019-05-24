@@ -34,13 +34,18 @@ class Game {
     }
 
     async run(){
-
+        let winner = 0;
         while(true){
             if(this.state.playerLost(0)){
                 console.log("PLAYER 1 WON");
+                winner = 1;
                 break;
             }else if(this.state.playerLost(1)){
                 console.log("PLAYER 0 WON");
+                winner = 0;
+                break;
+            }else if(this.state.n_turns[1] > 50){
+                winner = 0.5
                 break;
             }else{
                 if(this.state.active_player === 0 && this.exportData) CSVExport(`\n${this.state.n_turns[0]}`);
@@ -48,8 +53,8 @@ class Game {
                 this.state.printBoard();
             }
         }
-        if(this.exportData) CSVExport(`\n\nTotal Elapsed Time:, ${(process.hrtime(this.startTime)[1] / 1000000)}, Winner:, ${this.state.playerLost(0) ? 1 : 0}`);
-
+        if(this.exportData) CSVExport(`\n\nTotal Elapsed Time:, ${(process.hrtime(this.startTime)[1] / 1000000)}, Winner:, ${winner}`);
+        return winner;
     }
 
     isGameOver(){
