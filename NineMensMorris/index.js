@@ -2,13 +2,97 @@ const express = require('express');
 require('dotenv').config()
 const CSVSubmit = require('./Exporter.js').CSVSubmit;
 const CSVExport = require('./Exporter.js').CSVExport;
-const MinimaxAIPlayer = require('./players/MinimaxAIPlayer.js');
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 const Game = require('./Game.js')
 const PLAYER_TYPES = require('./State.js').PLAYER_TYPES
+
+const PLAYER_OPTIONS = Object.freeze({
+    0: {
+        label: "Human",
+        player: {type: PLAYER_TYPES.HUMAN, depth: 0}
+    },
+    1: {
+        label: "AI - Easiest",
+        player: {type: PLAYER_TYPES.RANDOM, depth: 0}
+    },
+    2: {
+        label: "AI - Easy",
+        player: {type: PLAYER_TYPES.MINIMAX, depth: 1}
+    },
+    3: {
+        label: "AI - Medium",
+        player: {type: PLAYER_TYPES.MINIMAX, depth: 2}
+    },
+    4: {
+        label: "AI - Hard",
+        player: {type: PLAYER_TYPES.MINIMAX, depth: 3}
+    },
+});
+
+const readline = require('./readline_util.js').readline;
+
+
+
+const getInput = (prompt) => {
+    return new Promise( (resolve) => {
+        readline.question(`${prompt}`, input => {
+            return resolve(input);
+        });
+    })
+}
+
+const readPlayerType = async (player_label) => {
+    let valid_choice = false;
+    let choice;
+
+    do {
+        for (const option in PLAYER_OPTIONS) {
+            console.log(`${option} - ${PLAYER_OPTIONS[option].label}`);            
+        }
+
+        try {
+            let input = await getInput(`Please choose ${player_label} type: \n`)
+    
+            if(PLAYER_OPTIONS.hasOwnProperty(input)) {
+                choice = PLAYER_OPTIONS[input].player;
+                valid_choice = true;
+            } else {
+                console.log("Invalid option, try again....")
+            }
+        } catch (e) {
+            console.error("There was an error...");
+        }
+        
+
+    } while(!valid_choice);
+
+    return choice;
+}
+
+const init = async () => {
+    const player1_type = await readPlayerType("Player 1");
+    const player2_type = await readPlayerType("Player 2");
+    
+    //ask to choose first player
+    const first_player = 0;
+    
+    const game = new Game(player1_type, player2_type, first_player);
+    game.run();
+}
+
+init();
+
+
+
+
+
+
+
+
+
 
 app.get('/', (req, res) => {
 
@@ -117,4 +201,5 @@ app.get('/export-winners', async (req, res) => {
     res.json(0);
 });
 
-app.listen(port, () => console.log(`Started Server on port ${port}!`))
+// app.listen(port, () => console.log(`Started Server on port ${port}!`))
+

@@ -1,10 +1,8 @@
 const Player = require('./Player.js');
 const CELL_STATES = require('../State.js').CELL_STATES;
 const ACTIONS = require('../State.js').ACTIONS;
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+
+const readline = require('../readline_util.js').readline;
 
 const COORDINATES_READABLE = Object.freeze({
     'a1': 17,
