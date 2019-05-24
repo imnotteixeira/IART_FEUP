@@ -68,7 +68,7 @@ class Game {
             case PLAYER_TYPES.MINIMAX:
                 return new MinimaxAIPlayer(id, playerType.depth, playerType.dont_prune, playerType.prioritize_mills, this.exportData);
             case PLAYER_TYPES.HUMAN:
-                return new HumanPlayer(id);    2
+                return new HumanPlayer(id);
         }
     }
 

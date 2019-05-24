@@ -13,7 +13,7 @@ class MinimaxAIPlayer extends AIPlayer {
 
     chooseNextMove(moves) {
 
-        console.log("number of moves first level: " + moves.length);
+        //console.log("number of moves first level: " + moves.length);
 
         this.statesCount = moves.length;
 
@@ -34,12 +34,11 @@ class MinimaxAIPlayer extends AIPlayer {
         for(let i in moveValues){
             if(moveValues[i].value !== best_value){
                 chosen_move = moveValues[Math.floor(Math.random()*i)].move;
-                console.log("Amount of best moves: " + i);
                 break;
             }
         }
 
-        console.log("cuts: ", this.minimaxCuts);
+        // console.log("cuts: ", this.minimaxCuts);
         this.minimaxCuts = 0;
 
         if(this.exportData) CSVExport(`, ${this.statesCount}`);
